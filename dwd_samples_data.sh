@@ -13,15 +13,15 @@ mkdir data_echantillons
 cd data_echantillons
 
 # Numéro d'accès SRA
-SRA_ACCESSION_1="SRR10379721"
-SRA_ACCESSION_2="SRR10379722"
-SRA_ACCESSION_3="SRR10379723"
-SRA_ACCESSION_4="SRR10379724"
-SRA_ACCESSION_5="SRR10379725"
-SRA_ACCESSION_6="SRR10379726"
+SRA_ACCESSION_1="SRR10379721"  #persister replicate 1
+SRA_ACCESSION_2="SRR10379722"  #perister replicate 2
+SRA_ACCESSION_3="SRR10379723"  #persister replicate 3
+SRA_ACCESSION_4="SRR10379724"  #control replicate 1
+SRA_ACCESSION_5="SRR10379725"  #control replicate 2
+SRA_ACCESSION_6="SRR10379726"  #control replicate 3
 
 # Répertoire de sortie
-OUTPUT_DIRECTORY="/home/ubuntu/data_echantillons"
+OUTPUT_DIRECTORY="/home/ubuntu/Reprohackathon2023/data_echantillons"
 
 # Nom de fichier de sortie personnalisé (sans extension .fastq)
 NOM_FICHIER_1="persister_replicate_1"
@@ -48,10 +48,16 @@ fastq-dump --outdir "$OUTPUT_DIRECTORY" --split-files --origfmt --defline-seq '@
 fastq-dump --outdir "$OUTPUT_DIRECTORY" --split-files --origfmt --defline-seq '@$sn/$ri' --defline-qual '+' "$SRA_ACCESSION_5" -O "$OUTPUT_DIRECTORY/$NOM_FICHIER_5"
 fastq-dump --outdir "$OUTPUT_DIRECTORY" --split-files --origfmt --defline-seq '@$sn/$ri' --defline-qual '+' "$SRA_ACCESSION_6" -O "$OUTPUT_DIRECTORY/$NOM_FICHIER_6"
 
-# Renommer les fichiers FASTQ
-mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_1".fastq "$OUTPUT_DIRECTORY/${SRA_ACCESSION_1}.fastq"
-mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_2".fastq "$OUTPUT_DIRECTORY/${SRA_ACCESSION_2}.fastq"
-mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_3".fastq "$OUTPUT_DIRECTORY/${SRA_ACCESSION_3}.fastq"
-mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_4".fastq "$OUTPUT_DIRECTORY/${SRA_ACCESSION_4}.fastq"
-mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_5".fastq "$OUTPUT_DIRECTORY/${SRA_ACCESSION_5}.fastq"
-mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_6".fastq "$OUTPUT_DIRECTORY/${SRA_ACCESSION_6}.fastq"
+# Renommer les fichiers FASTQ (paired-end)
+mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_1"_1.fastq "$OUTPUT_DIRECTORY/${NOM_FICHIER_1}_R1.fastq"
+mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_1"_2.fastq "$OUTPUT_DIRECTORY/${NOM_FICHIER_1}_R2.fastq"
+mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_2"_1.fastq "$OUTPUT_DIRECTORY/${NOM_FICHIER_2}_R1.fastq"
+mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_2"_2.fastq "$OUTPUT_DIRECTORY/${NOM_FICHIER_2}_R2.fastq"
+mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_3"_1.fastq "$OUTPUT_DIRECTORY/${NOM_FICHIER_3}_R1.fastq"
+mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_3"_2.fastq "$OUTPUT_DIRECTORY/${NOM_FICHIER_3}_R2.fastq"
+mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_4"_1.fastq "$OUTPUT_DIRECTORY/${NOM_FICHIER_4}_R1.fastq"
+mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_4"_2.fastq "$OUTPUT_DIRECTORY/${NOM_FICHIER_4}_R2.fastq"
+mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_5"_1.fastq "$OUTPUT_DIRECTORY/${NOM_FICHIER_5}_R1.fastq"
+mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_5"_2.fastq "$OUTPUT_DIRECTORY/${NOM_FICHIER_5}_R2.fastq"
+mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_6"_1.fastq "$OUTPUT_DIRECTORY/${NOM_FICHIER_6}_R1.fastq"
+mv "$OUTPUT_DIRECTORY/$SRA_ACCESSION_6"_2.fastq "$OUTPUT_DIRECTORY/${NOM_FICHIER_6}_R2.fastq"
