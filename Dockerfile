@@ -8,8 +8,24 @@ RUN apt install wget
 RUN apt-get update && apt-get install -y subread
 RUN apt-get update && apt-get install -y software-properties-common
 RUN apt-get update && apt-get install -y libxml2 libssl-dev libcurl4-openssl-dev
+RUN apt-get install -y wget
+
+#############################################################################################
+####### SRA Toolkit pour le téléchargement des fichiers fastq #########
+# Téléchargement et installation de SRA Toolkit
+RUN mkdir docker_SRAToolkit
+WORKDIR /docker_SRAToolkit
+RUN wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-ubuntu64.tar.gz && \
+    tar -xzf sratoolkit.current-ubuntu64.tar.gz && \
+    cd sratoolkit.current-ubuntu64 && \
+    ./install
+# Nettoyage des fichiers temporaires
+RUN rm -rf sratoolkit.current-ubuntu64.tar.gz sratoolkit.current-ubuntu64
+# Commande par défaut à exécuter lorsque le conteneur démarre
+CMD [ "fastq-dump", "--version" ]
 
 
+#############################################################################################
 ####### Bowtie Version 0.12.7 pour l'alignement des séquences ######
 # Téléchargement de Bowtie 0.12.7 depuis la source officielle
 RUN mkdir docker_bowtie
