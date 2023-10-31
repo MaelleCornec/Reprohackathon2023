@@ -14,7 +14,7 @@ RUN wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.10.8/sratoolkit.2.10.8-ubu
 ENV PATH="/opt/sratoolkit/bin:${PATH}"
 
 # Définition du répertoire de travail
-WORKDIR /home/ubuntu/Reprohackathon2023/data
+WORKDIR /home/ubuntu/Reprohackathon2023/containers/SRA_Toolkit
 
 # Commande par défaut (exécutez `vdb-config -version` pour vérifier l'installation)
 CMD ["vdb-config", "-version"]
