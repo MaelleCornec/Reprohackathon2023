@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# On donne tous les droits aux utilisateurs 
+chmod -R 777 /home/ubuntu/Reprohackathon2023/containers
+
 # Création de l'image sratoolkit à partir du Dockerfile dans le répertoire containers/SRA_Toolkit
 /home/ubuntu/Reprohackathon2023/containers/SRA_Toolkit/Dockerfile
 docker build -t sratoolkit -f Dockerfile .
