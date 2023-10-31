@@ -1,15 +1,6 @@
 #Spécification de l'image de base qu'on souhaite utiliser 
 FROM ubuntu:22.04 
 
-#Installation des dépendances et des logiciels
-RUN apt-get update && apt-get install -y python3 python3-pip
-RUN apt-get update && apt-get install -y build-essential zlib1g-dev curl unzip
-RUN apt install wget
-RUN apt-get update && apt-get install -y subread
-RUN apt-get update && apt-get install -y software-properties-common
-RUN apt-get update && apt-get install -y libxml2 libssl-dev libcurl4-openssl-dev
-RUN apt-get install -y wget
-
 # R version version 3.4.1 pour l'analyse des données de comptage 
 # Ajout du référentiel CRAN pour R
 RUN apt-get update && apt-get install -y software-properties-common
