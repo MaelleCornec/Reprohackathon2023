@@ -12,15 +12,15 @@ cd perister_replicate_3
 trim_galore -q 20 --phred33 --length 25 SRR10379723_1.fastq
 cd -
 
-cd control_1
+cd control_replicate_1
 trim_galore -q 20 --phred33 --length 25 SRR10379724_1.fastq
 cd -
 
-cd control_2
+cd control_replicate_2
 trim_galore -q 20 --phred33 --length 25 SRR10379725_1.fastq
 cd -
 
-cd control_3
+cd control_replicate_3
 trim_galore -q 20 --phred33 --length 25 SRR10379726_1.fastq
 cd -
 
