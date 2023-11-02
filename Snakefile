@@ -19,11 +19,15 @@ rule indexing:
 # et élimination des échantillons de moins de 25 nucléotides
 rule trimming:
     input:
-        "data40000/{echantillon}.fastq"
+        expand("data40000/{echantillon}.fastq", echantillon=ECHANTILLONS)
     output:
-        "data40000trim/{echantillon}_trimmed.fq"
+        expand("{echantillon}_trimmed.fq {echantillon}.fastq_trimming_report.txt", echantillon=ECHANTILLONS)
     shell:
-        "trim_galore -q 20 --phred33 --length 25 {input} {output}"
+        """
+        mkdir data40000trim
+        trim_galore -q 20 --phred33 --length 25 {input}
+        mv {output} data40000trim
+        """
 
 # Cartographie des échantillons grâce à l'index fait sur le génome de référence
 rule mapping:

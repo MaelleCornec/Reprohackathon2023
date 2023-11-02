@@ -84,3 +84,26 @@ rule analysis:
         "de_seq2"
     script:
         "analysis.py"
+
+##########################
+# Dénombrement des motifs présents sur les échantillons
+# grâce aux annotations du génome de référence
+rule counting:
+    input:
+        "data40000map/{echantillon}.bam",
+        "reference.gff"
+    output:
+        "data40000compt/counts.txt"
+    shell:
+        "featureCounts --extraAttributes Name -t gene -g ID -F GTF -T 4 -a reference.gff -o counts.txt {echantillon}.bam
+
+# analyse des échantillons
+# en connaissant le nom des gènes
+
+rule analysis:
+    input:
+        "compt/counts.txt"
+    output:
+        "je ne sais vraiment plus"
+    script:
+        "analysis.py"
