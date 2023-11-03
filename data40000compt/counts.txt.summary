@@ -1,0 +1,15 @@
+Status	data40000map/SRR10379721.bam	data40000map/SRR10379722.bam	data40000map/SRR10379723.bam	data40000map/SRR10379724.bam	data40000map/SRR10379725.bam	data40000map/SRR10379726.bam
+Assigned	4845	4752	4673	4702	5661	2407
+Unassigned_Unmapped	3645	3805	3865	3305	2345	6376
+Unassigned_Read_Type	0	0	0	0	0	0
+Unassigned_Singleton	0	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0	0
+Unassigned_MultiMapping	0	0	0	0	0	0
+Unassigned_Secondary	0	0	0	0	0	0
+Unassigned_NonSplit	0	0	0	0	0	0
+Unassigned_NoFeatures	1346	1297	1277	1850	1809	1137
+Unassigned_Overlapping_Length	0	0	0	0	0	0
+Unassigned_Ambiguity	163	146	185	143	185	79
