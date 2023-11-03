@@ -51,3 +51,13 @@ rule mapping:
         samtools index data40000map/SRR10379726.bam
         """
 
+# Dénombrement des motifs présents sur les échantillons
+# grâce aux annotations du génome de référence
+rule counting:
+    input:
+        ech=expand("data40000map/{echantillon}.bam", echantillon=ECHANTILLONS),
+        ref="reference.gff"
+    output:
+        "data40000compt/counts.txt"
+    shell:
+        "featureCounts --extraAttributes Name -t gene -g ID -F GTF -T 4 -a {input.ref} -o {output} {input.ech}"
