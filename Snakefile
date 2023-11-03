@@ -22,6 +22,8 @@ rule indexing:
         "reference/genome.fasta"
     output:
         "index/indexation"
+    singularity:
+        "docker pull suzannegtx/bowtie:0.12.7"
     shell: 
         "bowtie-build {input} {output}"
 
@@ -32,6 +34,8 @@ rule trimming:
         expand("data40000/{echantillon}.fastq", echantillon=ECHANTILLONS)
     output:
         expand("{echantillon}_trimmed.fq {echantillon}.fastq_trimming_report.txt", echantillon=ECHANTILLONS)
+    singularity:
+        "docker pull suzannegtx/trim-galore:0.6.4"
     shell:
         """
         mkdir data40000trim
@@ -45,6 +49,8 @@ rule mapping:
         expand("data40000trim/{echantillon}_trimmed.fq", echantillon=ECHANTILLONS)      
     output:
         expand("data40000map/{echantillon}.bam", echantillon=ECHANTILLONS)
+    singularity:
+        "docker pull suzannegtx/trim-galore:0.6.4"
     shell:
         """
         bowtie -p 4 -S -x index/indexation data40000trim/SRR10379721_trimmed.fq | samtools sort -@ 4 -o data40000map/SRR10379721.bam
@@ -79,6 +85,8 @@ rule counting:
         ref="reference/genome.gff"
     output:
         "data40000compt/counts.txt"
+    singularity:
+        "docker pull suzannegtx/subreads-featurecounts:1.4.6-p3"
     shell:
         "featureCounts --extraAttributes Name -t gene -g ID -F GTF -T 4 -a {input.ref} -o {output} {input.ech}"
 
