@@ -6,10 +6,20 @@ rule all:
     input:
         expand("data40000/{echantillon}.fastq", echantillon=ECHANTILLONS)
 
+# Téléchargement du génome de référence
+# dans un dossier reference
+rule genome:
+    output:
+        "reference/genome.fasta"
+    shell:
+        """
+        wget -q -O {output} "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP000253.1&rettype=fasta"
+        """
+
 # Création de l'index sur le génome de référence
 rule indexing:
     input:
-        "reference.fasta"
+        "reference/genome.fasta"
     output:
         "index/indexation"
     shell: 
@@ -51,13 +61,33 @@ rule mapping:
         samtools index data40000map/SRR10379726.bam
         """
 
+# Téléchargement des annotations du génome de référence
+# dans un dossier reference
+rule annotation_gen:
+    output:
+        "reference/genome.gff"
+    shell:
+        """
+        wget -O {output} "https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1"
+        """
+
 # Dénombrement des motifs présents sur les échantillons
 # grâce aux annotations du génome de référence
 rule counting:
     input:
         ech=expand("data40000map/{echantillon}.bam", echantillon=ECHANTILLONS),
-        ref="reference.gff"
+        ref="reference/genome.gff"
     output:
         "data40000compt/counts.txt"
     shell:
         "featureCounts --extraAttributes Name -t gene -g ID -F GTF -T 4 -a {input.ref} -o {output} {input.ech}"
+
+# Analyse des échantillons
+# en connaissant le nom des gènes
+#rule analysis:
+#    input:
+#        "data40000compt/counts.txt"
+#    output:
+#        "je ne sais vraiment plus"
+#    script:
+#        "analysis.py"
