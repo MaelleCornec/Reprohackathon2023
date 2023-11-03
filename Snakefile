@@ -32,13 +32,22 @@ rule trimming:
 # Cartographie des échantillons grâce à l'index fait sur le génome de référence
 rule mapping:
     input:
-        "index/*",
-        "data40000trim/{echantillon}_trimmed.fq"
+        expand("data40000trim/{echantillon}_trimmed.fq", echantillon=ECHANTILLONS)      
     output:
-        "data40000map/{echantillon}.bam"
+        expand("data40000map/{echantillon}.bam", echantillon=ECHANTILLONS)
     shell:
         """
-        bowtie -p 4 -S {input} | \samtools sort -@ 4 {output}
-        samtools index {output}
+        bowtie -p 4 -S -x index/indexation data40000trim/SRR10379721_trimmed.fq | samtools sort -@ 4 -o data40000map/SRR10379721.bam
+        bowtie -p 4 -S -x index/indexation data40000trim/SRR10379722_trimmed.fq | samtools sort -@ 4 -o data40000map/SRR10379722.bam
+        bowtie -p 4 -S -x index/indexation data40000trim/SRR10379723_trimmed.fq | samtools sort -@ 4 -o data40000map/SRR10379723.bam
+        bowtie -p 4 -S -x index/indexation data40000trim/SRR10379724_trimmed.fq | samtools sort -@ 4 -o data40000map/SRR10379724.bam
+        bowtie -p 4 -S -x index/indexation data40000trim/SRR10379725_trimmed.fq | samtools sort -@ 4 -o data40000map/SRR10379725.bam
+        bowtie -p 4 -S -x index/indexation data40000trim/SRR10379726_trimmed.fq | samtools sort -@ 4 -o data40000map/SRR10379726.bam
+        samtools index data40000map/SRR10379721.bam
+        samtools index data40000map/SRR10379722.bam
+        samtools index data40000map/SRR10379723.bam
+        samtools index data40000map/SRR10379724.bam
+        samtools index data40000map/SRR10379725.bam
+        samtools index data40000map/SRR10379726.bam
         """
 
