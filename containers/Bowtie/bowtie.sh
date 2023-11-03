@@ -2,10 +2,13 @@
 # cp /home/ubuntu/Reprohackathon2023/reference.fasta /home/ubuntu/Reprohackathon2023/containers/Bowtie/
 
 # Construction de l'image Docker
-docker build -t bowtie:0.12.7 /home/ubuntu/Reprohackathon2023/containers/Bowtie
+#docker build -t bowtie:0.12.7 .
+docker build -t bowtie:0.12.7 -f Dockerfile .
+
+
 
 # Exécution de l'image
-docker run -it bowtie:0.12.7
+#docker run -it bowtie:0.12.7
 
 # Indexation du génome de référence 
 #bowtie-build reference.fasta genome_ref_index
