@@ -22,8 +22,8 @@ rule indexing:
         "reference/genome.fasta"
     output:
         "index/indexation"
-    singularity:
-        "docker pull suzannegtx/bowtie:0.12.7"
+    container:
+        "suzannegtx/bowtie:0.12.7"
     shell: 
         "bowtie-build {input} {output}"
 
@@ -31,11 +31,11 @@ rule indexing:
 # et élimination des échantillons de moins de 25 nucléotides
 rule trimming:
     input:
-        expand("data40000/{echantillon}.fastq", echantillon=ECHANTILLONS)
+        "data40000/{echantillon}.fastq"
     output:
-        expand("{echantillon}_trimmed.fq {echantillon}.fastq_trimming_report.txt", echantillon=ECHANTILLONS)
-    singularity:
-        "docker pull suzannegtx/trim-galore:0.6.4"
+        "{echantillon}_trimmed.fq {echantillon}.fastq_trimming_report.txt"
+    container:
+        "suzannegtx/trim-galore:0.6.4"
     shell:
         """
         mkdir data40000trim
@@ -46,25 +46,15 @@ rule trimming:
 # Cartographie des échantillons grâce à l'index fait sur le génome de référence
 rule mapping:
     input:
-        expand("data40000trim/{echantillon}_trimmed.fq", echantillon=ECHANTILLONS)      
+        "data40000trim/{echantillon}_trimmed.fq"      
     output:
-        expand("data40000map/{echantillon}.bam", echantillon=ECHANTILLONS)
-    singularity:
-        "docker pull suzannegtx/trim-galore:0.6.4"
+        "data40000map/{echantillon}.bam"
+    container:
+        "suzannegtx/trim-galore:0.6.4"
     shell:
         """
-        bowtie -p 4 -S -x index/indexation data40000trim/SRR10379721_trimmed.fq | samtools sort -@ 4 -o data40000map/SRR10379721.bam
-        bowtie -p 4 -S -x index/indexation data40000trim/SRR10379722_trimmed.fq | samtools sort -@ 4 -o data40000map/SRR10379722.bam
-        bowtie -p 4 -S -x index/indexation data40000trim/SRR10379723_trimmed.fq | samtools sort -@ 4 -o data40000map/SRR10379723.bam
-        bowtie -p 4 -S -x index/indexation data40000trim/SRR10379724_trimmed.fq | samtools sort -@ 4 -o data40000map/SRR10379724.bam
-        bowtie -p 4 -S -x index/indexation data40000trim/SRR10379725_trimmed.fq | samtools sort -@ 4 -o data40000map/SRR10379725.bam
-        bowtie -p 4 -S -x index/indexation data40000trim/SRR10379726_trimmed.fq | samtools sort -@ 4 -o data40000map/SRR10379726.bam
-        samtools index data40000map/SRR10379721.bam
-        samtools index data40000map/SRR10379722.bam
-        samtools index data40000map/SRR10379723.bam
-        samtools index data40000map/SRR10379724.bam
-        samtools index data40000map/SRR10379725.bam
-        samtools index data40000map/SRR10379726.bam
+        bowtie -p 4 -S -x index/indexation {input} | samtools sort -@ 4 -o {output}
+        samtools index {output}
         """
 
 # Téléchargement des annotations du génome de référence
@@ -85,8 +75,8 @@ rule counting:
         ref="reference/genome.gff"
     output:
         "data40000compt/counts.txt"
-    singularity:
-        "docker pull suzannegtx/subreads-featurecounts:1.4.6-p3"
+    container:
+        "suzannegtx/subreads-featurecounts:1.4.6-p3"
     shell:
         "featureCounts --extraAttributes Name -t gene -g ID -F GTF -T 4 -a {input.ref} -o {output} {input.ech}"
 
