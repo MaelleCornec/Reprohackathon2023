@@ -1,0 +1,100 @@
+---
+title: "MA plot"
+author: "Gabriel Clérempuy"
+date: "2023-11-03"
+output: html_document
+---
+```{r setup, include=FALSE}
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+
+data_full <- read.csv("GSE139659_IPvsctrl.complete.csv", header = TRUE, sep = ";")
+
+head(data_full)
+```
+
+```{r}
+#POUR TOUT LES GENES
+#Création des colonnes : baseMean, log2FoldChange (sera vraiment utiles quand elles n'existeront pas déjà)
+data_full$BaseMean_calculated <- log2((data_full$ctrl4 + data_full$ctrl5 + data_full$ctrl6 + data_full$IP1 + data_full$IP2 + data_full$IP3)/6)
+
+data_full$log2Foldchange_calculated <- log2((data_full$IP1 + data_full$IP2 + data_full$IP3) / (data_full$ctrl4 + data_full$ctrl5 + data_full$ctrl6))
+head(data_full,100)
+
+```
+
+```{r}
+#Tracer des MA-plots - tout les gènes (baseMean et log2FoldChange du csv fourni dans l'article)
+data_full$log2FoldChange[data_full$log2FoldChange > 4] <- 4.1
+data_full$log2FoldChange[data_full$log2FoldChange < -4] <- -4.1
+
+plot(data_full$baseMean, data_full$log2FoldChange, 
+     xlab = "Average Intensity (A))",
+     ylab = "Log2 Fold Change (M)", 
+     main = "MA-plot of complete RNA-seq data_fullset", 
+     ylim = c(-4.5, 4.5),
+     log = "x",
+     cex = 0.4)
+
+points(data_full$baseMean, data_full$log2FoldChange,cex = 0.4, pch = 19, col = ifelse(data_full$pvalue < 0.05, "red", "black"))
+points(data_full$baseMean[data_full$log2FoldChange > 4], data_full$log2FoldChange[data_full$log2FoldChange > 4], pch = 24, cex = 0.4)
+points(data_full$baseMean[data_full$log2FoldChange < -4], data_full$log2FoldChange[data_full$log2FoldChange < -4], pch = 25, cex = 0.4)
+
+
+abline(h = 0, col = "black", lty = 2)
+```
+
+```{r}
+#***************************************************************************************
+#***************************************************************************************
+#*#***************************************************************************************
+#*#***************************************************************************************
+
+```
+
+```{r}
+#Création du tableau contenant uniquement les gènes liés à la traduction
+#Pas besoin de créer les colonnes Log2FoldChange et baseMean
+# ni les colonnes Log2FoldChange_calculated et baseMean_calculated vu qu'elles ont déjà été extraites
+noms_genes <- read.csv("Gene_Names_1col_true.csv", header = TRUE, sep = ";")
+data_genes <- data_full %>%
+  filter(Name %in% noms_genes$Name)
+
+head(data_genes)
+```
+```{r}
+#Tracer des MA-plots -gènes traduction (avec log2foldChange et baseMean de l'article)
+data_genes$log2FoldChange[data_genes$log2FoldChange > 4] <- 4.1
+data_genes$log2FoldChange[data_genes$log2FoldChange < -4] <- -4.1
+
+plot(log2(data_genes$baseMean), data_genes$log2FoldChange, 
+     xlab = "Average Intensity (A)",
+     ylab = "Log2 Fold Change (M)", 
+     main = "MA-plot of translation genes RNA-seq dataset", 
+     ylim = c(-4.5, 4.5),
+     log = "x",
+     cex = 0.4)
+
+points(log2(data_genes$baseMean), data_genes$log2FoldChange,cex = 0.5, pch = 19, col = ifelse(data$pvalue < 0.05, "red", "black"))
+points(log2(data_genes$baseMean)[data_genes$log2FoldChange > 4], data_genes$log2FoldChange[data_genes$log2FoldChange > 4], pch = 24, cex = 0.4)
+points(log2(data_genes$baseMean)[data_genes$log2FoldChange < -4], data_genes$log2FoldChange[data_genes$log2FoldChange < -4], pch = 25, cex = 0.4)
+
+
+abline(h = 0, col = "black", lty = 2)
+```
+
+
+
