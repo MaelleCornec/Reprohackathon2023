@@ -1,16 +1,23 @@
 # Référencement du nom des 6 fichiers à étudier
+############### A changer : voir site
 ECHANTILLONS = ['SRR10379721','SRR10379722','SRR10379723','SRR10379724','SRR10379725','SRR10379726']
 
-# Définition de la wildcard echantillon
+# Snakemake définit par défaut la première règle comme la cible.
+# A l'état actuel, je n'ai pas encore inclus les script python dans le snakefile,
+# Donc ma cible est le fichier count.
+# Comme ça, quand on exécute la commande snakemake --cores, 
+# Il exécutera récursivement toutes les règles nécessaires pour obtenir le fichier count
 rule all:
     input:
-        expand("data40000/{echantillon}.fastq", echantillon=ECHANTILLONS)
+        "data_comptage/counts.txt"
 
 # Téléchargement du génome de référence
 # dans un dossier reference
+####### Ce serait une bonne idée de mettre le lien dans un autre fichier 
+####### Pour pouvoir plus aptement utiliser ce scrip ailleurs
 rule genome:
     output:
-        "reference/genome.fasta"
+        "genome/reference.fasta"
     shell:
         """
         wget -q -O {output} "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP000253.1&rettype=fasta"
@@ -19,7 +26,7 @@ rule genome:
 # Création de l'index sur le génome de référence
 rule indexing:
     input:
-        "reference/genome.fasta"
+        "genome/reference.fasta"
     output:
         "index/indexation"
     container:
@@ -33,35 +40,36 @@ rule trimming:
     input:
         "data40000/{echantillon}.fastq"
     output:
-        "{echantillon}_trimmed.fq {echantillon}.fastq_trimming_report.txt"
+        "data_trim/{echantillon}_trimmed.fq"
     container:
         "suzannegtx/trim-galore:0.6.4"
     shell:
         """
-        mkdir data40000trim
-        trim_galore -q 20 --phred33 --length 25 {input}
-        mv {output} data40000trim
+        trim_galore -q 20 --phred33 --length 25 {input} -O data_trim
         """
 
 # Cartographie des échantillons grâce à l'index fait sur le génome de référence
 rule mapping:
     input:
-        "data40000trim/{echantillon}_trimmed.fq"      
+        ind="index/indexation",
+        data="data_trim/{echantillon}_trimmed.fq"      
     output:
-        "data40000map/{echantillon}.bam"
+        "data_map/{echantillon}.bam"
     container:
         "suzannegtx/trim-galore:0.6.4"
     shell:
         """
-        bowtie -p 4 -S -x index/indexation {input} | samtools sort -@ 4 -o {output}
+        bowtie -p 4 -S -x {input.ind} {input.data} | samtools sort -@ 4 -o {output}
         samtools index {output}
         """
 
 # Téléchargement des annotations du génome de référence
 # dans un dossier reference
+####### Ce serait une bonne idée de mettre le lien dans un autre fichier 
+####### Pour pouvoir plus aptement utiliser ce scrip ailleurs
 rule annotation_gen:
     output:
-        "reference/genome.gff"
+        "genome/reference.gff"
     shell:
         """
         wget -O {output} "https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1"
@@ -71,14 +79,14 @@ rule annotation_gen:
 # grâce aux annotations du génome de référence
 rule counting:
     input:
-        ech=expand("data40000map/{echantillon}.bam", echantillon=ECHANTILLONS),
-        ref="reference/genome.gff"
+        ech=expand("data_map/{echantillon}.bam", echantillon=ECHANTILLONS),
+        ref="genome/reference.gff"
     output:
-        "data40000compt/counts.txt"
+        "data_comptage/counts.txt"
     container:
         "suzannegtx/subreads-featurecounts:1.4.6-p3"
     shell:
-        "featureCounts --extraAttributes Name -t gene -g ID -F GTF -T 4 -a {input.ref} -o {output} {input.ech}"
+        "featureCounts --extraAttributes Name -t gene -g -s 1 ID -F GTF -T 4 -a {input.ref} -o {output} {input.ech}"
 
 # Analyse des échantillons
 # en connaissant le nom des gènes
