@@ -18,9 +18,11 @@ rule all:
 rule genome:
     output:
         "genome/reference.fasta"
+    params:
+        config["linkfasta"]
     shell:
         """
-        wget -q -O {output} "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP000253.1&rettype=fasta"
+        wget -q -O {output} "{params}"
         """
 
 # Création de l'index sur le génome de référence
@@ -41,7 +43,7 @@ def input_fastq(wildcards):
 # et élimination des échantillons de moins de 25 nucléotides
 rule trimming:
     input:
-        "data40000/{sample}.fastq"
+        "data/{sample}.fastq"
     output:
         "data_trim/{sample}_trimmed.fq"
     container:
@@ -72,9 +74,11 @@ rule mapping:
 rule annotation_gen:
     output:
         "genome/reference.gff"
+    params:
+        config["linkgff"]
     shell:
         """
-        wget -O {output} "https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1"
+        wget -O {output} "{params}"
         """
 
 # Dénombrement des motifs présents sur les échantillons
