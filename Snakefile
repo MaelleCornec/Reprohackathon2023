@@ -1,6 +1,6 @@
-# Référencement du nom des 6 fichiers à étudier
-############### A changer : voir site
-ECHANTILLONS = ['SRR10379721','SRR10379722','SRR10379723','SRR10379724','SRR10379725','SRR10379726']
+# Chargement du fichier de configuration config.yaml
+configfile:
+    "config.yaml"
 
 # Snakemake définit par défaut la première règle comme la cible.
 # A l'état actuel, je n'ai pas encore inclus les script python dans le snakefile,
@@ -30,19 +30,22 @@ rule indexing:
     output:
         "index/indexation"
     container:
-        "suzannegtx/bowtie:0.12.7"
+        "docker://suzannegtx/bowtie:0.12.7"
     shell: 
         "bowtie-build {input} {output}"
+
+def input_fastq(wildcards):
+    return config["samples"][wildcards.sample]
 
 # Découpe des morceaux d'échantillons qui sont trop incertains
 # et élimination des échantillons de moins de 25 nucléotides
 rule trimming:
     input:
-        "data40000/{echantillon}.fastq"
+        "data40000/{sample}.fastq"
     output:
-        "data_trim/{echantillon}_trimmed.fq"
+        "data_trim/{sample}_trimmed.fq"
     container:
-        "suzannegtx/trim-galore:0.6.4"
+        "docker://suzannegtx/trim-galore:0.6.4"
     shell:
         """
         trim_galore -q 20 --phred33 --length 25 {input} -O data_trim
@@ -52,11 +55,11 @@ rule trimming:
 rule mapping:
     input:
         ind="index/indexation",
-        data="data_trim/{echantillon}_trimmed.fq"      
+        data="data_trim/{sample}_trimmed.fq"      
     output:
-        "data_map/{echantillon}.bam"
+        "data_map/{sample}.bam"
     container:
-        "suzannegtx/trim-galore:0.6.4"
+        "docker://suzannegtx/trim-galore:0.6.4"
     shell:
         """
         bowtie -p 4 -S -x {input.ind} {input.data} | samtools sort -@ 4 -o {output}
@@ -79,12 +82,12 @@ rule annotation_gen:
 # grâce aux annotations du génome de référence
 rule counting:
     input:
-        ech=expand("data_map/{echantillon}.bam", echantillon=ECHANTILLONS),
+        ech=expand("data_map/{sample}.bam", echantillon=config["samples"]),
         ref="genome/reference.gff"
     output:
         "data_comptage/counts.txt"
     container:
-        "suzannegtx/subreads-featurecounts:1.4.6-p3"
+        "docker://suzannegtx/subreads-featurecounts:1.4.6-p3"
     shell:
         "featureCounts --extraAttributes Name -t gene -g -s 1 ID -F GTF -T 4 -a {input.ref} -o {output} {input.ech}"
 
