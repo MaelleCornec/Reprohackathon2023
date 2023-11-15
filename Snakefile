@@ -14,7 +14,7 @@ rule all:
 # Téléchargement du génome de référence
 # dans un dossier reference
 ####### Ce serait une bonne idée de mettre le lien dans un autre fichier 
-####### Pour pouvoir plus aptement utiliser ce scrip ailleurs
+####### Pour pouvoir plus aptement utiliser ce script ailleurs
 rule genome:
     output:
         "genome/reference.fasta"
@@ -54,22 +54,21 @@ rule trimming:
 # Cartographie des échantillons grâce à l'index fait sur le génome de référence
 rule mapping:
     input:
-        ind="index/indexation",
-        data="data_trim/{sample}_trimmed.fq"      
+        "data_trim/{sample}_trimmed.fq"      
     output:
         "data_map/{sample}.bam"
     container:
         "docker://suzannegtx/trim-galore:0.6.4"
     shell:
         """
-        bowtie -p 4 -S -x {input.ind} {input.data} | samtools sort -@ 4 -o {output}
+        bowtie -p 4 -S -x index/indexation {input} | samtools sort -@ 4 -o {output}
         samtools index {output}
         """
 
 # Téléchargement des annotations du génome de référence
 # dans un dossier reference
 ####### Ce serait une bonne idée de mettre le lien dans un autre fichier 
-####### Pour pouvoir plus aptement utiliser ce scrip ailleurs
+####### Pour pouvoir plus aptement utiliser ce script ailleurs
 rule annotation_gen:
     output:
         "genome/reference.gff"
@@ -82,14 +81,14 @@ rule annotation_gen:
 # grâce aux annotations du génome de référence
 rule counting:
     input:
-        ech=expand("data_map/{sample}.bam", echantillon=config["samples"]),
+        ech=expand("data_map/{sample}.bam", sample=config["samples"]),
         ref="genome/reference.gff"
     output:
         "data_comptage/counts.txt"
     container:
         "docker://suzannegtx/subreads-featurecounts:1.4.6-p3"
     shell:
-        "featureCounts --extraAttributes Name -t gene -g -s 1 ID -F GTF -T 4 -a {input.ref} -o {output} {input.ech}"
+        "featureCounts --extraAttributes Name -t gene -g ID -s 1 -F GTF -T 4 -a {input.ref} -o {output} {input.ech}"
 
 # Analyse des échantillons
 # en connaissant le nom des gènes
