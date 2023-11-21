@@ -2,7 +2,11 @@
 FROM ubuntu:22.04
 
 # Mise à jour du système et installation des dépendances nécessaires
-RUN apt-get update && apt-get install -y wget
+RUN apt-get update -y && \
+    apt-get install -y wget build-essential
+
+# Installation du module JSON::PP pour résoudre l'erreur lors de l'exécution du Snakefile
+RUN apt-get install -y libjson-pp-perl
 
 # Téléchargement de SRA Toolkit version 2.10.0 depuis le site officiel
 RUN wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.10.0/sratoolkit.2.10.0-ubuntu64.tar.gz
