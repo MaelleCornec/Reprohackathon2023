@@ -10,15 +10,16 @@ rule all:
     input:
         "data_comptage/counts.txt"
 
-def input_fastq(wildcards):
-    return config["samples"][wildcards.sample]
-
 # Téléchargement des 6 échantillons à analyser
 rule downloading:
     output:
         "data/{sample}.fastq"
+    message:
+        "Téléchargement de {sample}"
     container:
         "docker://pegi3s/sratoolkit:2.10.0"
+    log:
+        "logs/downloading/{sample}.log"
     shell:
         """
         fasterq-dump --threads 8 --progress {wildcards.sample} -O data
@@ -30,8 +31,12 @@ rule trimming:
         "data/{sample}.fastq"
     output:
         "data_trim/{sample}_trimmed.fq"
+    message:
+        "Nettoyage de {sample}"
     container:
         "docker://suzannegtx/trimgalore-cutadapt:0.6.4"
+    log:
+        "logs/trimming/{sample}.log"
     shell:
         """
         trim_galore -q 20 --phred33 --length 25 {input} -O data_trim
@@ -43,6 +48,10 @@ rule genome:
         "genome/reference.fasta"
     params:
         config["linkfasta"]
+    message:
+        "Téléchargement du génome de référence"
+    log:
+        "logs/downloading/reference/fasta.log"
     shell:
         """
         wget -q -O {output} "{params}"
@@ -54,8 +63,12 @@ rule indexing:
         "genome/reference.fasta"
     output:
         "index/indexation"
+    message:
+        "Indexation du génome de référence"
     container:
         "docker://suzannegtx/bowtie:0.12.7"
+    log:
+        "logs/indexation.log"
     shell: 
         """
         bowtie-build {input} {output}
@@ -67,8 +80,12 @@ rule mapping:
         "data_trim/{sample}_trimmed.fq"      
     output:
         "data_map/{sample}.bam"
+    message:
+        "Mapping de {sample}"
     container:
-        "docker://suzannegtx/trimgalore-cutadapt:0.6.4"
+        "docker://suzannegtx/bowtie:0.12.7"
+    log:
+        "logs/mapping/{sample}.log"
     shell:
         """
         bowtie -p 4 -S -x index/indexation {input} | samtools sort -@ 4 -o {output}
@@ -81,6 +98,10 @@ rule annotation_gen:
         "genome/reference.gff"
     params:
         config["linkgff"]
+    message:
+        "Téléchargement des annotations du génome de référence"
+    log:
+        "logs/downloading/reference/gff.log" 
     shell:
         """
         wget -O {output} "{params}"
@@ -93,8 +114,12 @@ rule counting:
         ref="genome/reference.gff"
     output:
         "data_comptage/counts.txt"
+    message:
+        "Dénombrement des motifs"
     container:
         "docker://suzannegtx/subreads-featurecounts:1.4.6-p3"
+    log:
+        "logs/counting.log"
     shell:
         """
         featureCounts --extraAttributes Name -t gene -g ID -s 1 -F GTF -T 4 -a {input.ref} -o {output} {input.ech}
