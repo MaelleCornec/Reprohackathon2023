@@ -12,11 +12,8 @@ RUN wget https://sourceforge.net/projects/bowtie-bio/files/bowtie/0.12.7/bowtie-
 RUN unzip /bowtie-0.12.7-linux-x86_64.zip
 
 # Ajout du chemin vers Bowtie à la variable PATH
-ENV PATH="/bowtie:${PATH}"
+ENV PATH="$PATH:/bowtie-0.12.7"
 
 # Suppression des fichiers temporaires et inutiles
 RUN rm -f /tmp/bowtie-0.12.7-linux-x86_64.zip
-
-# Commande par défaut à exécuter lorsque le conteneur est démarré
-CMD ["bowtie"]
 
