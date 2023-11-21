@@ -1,24 +1,12 @@
-# Spécification de l'image Ubuntu 22.04 comme base
-FROM ubuntu:22.04
+#Spécification de l'image de base 
+FROM ubuntu:18.04
 
-# Mise à jour du système et installation des dépendances nécessaires
-RUN apt-get update -y && \
-    apt-get install -y wget build-essential
+#Téléchargament des dépendances nécessaires 
+RUN apt-get update \
+	&& apt-get install -y wget libxml-libxml-perl
 
-# Installation du module JSON::PP pour résoudre l'erreur lors de l'exécution du Snakefile
-RUN apt-get install -y libjson-pp-perl
+#Téléchargement de SRA Toolkit version 2.10.0 depuis la source officielle 
+RUN wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.10.0/sratoolkit.2.10.0-ubuntu64.tar.gz -O /tmp/sratoolkit.tar.gz \
+	&& tar zxvf /tmp/sratoolkit.tar.gz -C /opt/ && rm /tmp/sratoolkit.tar.gz
 
-# Téléchargement de SRA Toolkit version 2.10.0 depuis le site officiel
-RUN wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.10.0/sratoolkit.2.10.0-ubuntu64.tar.gz
-
-# Décompression de l'archive
-RUN tar xzf sratoolkit.2.10.0-ubuntu64.tar.gz
-
-# Ajout du répertoire contenant les outils du SRA Toolkit à la variable PATH
-ENV PATH="/sratoolkit.2.10.0-ubuntu64/bin:${PATH}"
-
-# Suppression des fichiers temporaires et inutiles
-RUN rm -rf sratoolkit.2.10.0-ubuntu64.tar.gz
-
-# Commande par défaut à exécuter lorsque le conteneur démarre
-CMD ["fastq-dump"]
+ENV PATH="/opt/sratoolkit.2.10.0-ubuntu64/bin/:${PATH}"
