@@ -18,7 +18,7 @@ rule downloading:
     output:
         "data/{sample}.fastq"
     container:
-        "docker://suzannegtx/sra-toolkit:2.10.0"
+        "docker://pegi3s/sratoolkit:2.10.0"
     shell:
         """
         fasterq-dump --threads 8 --progress {wildcards.sample} -O data
@@ -31,7 +31,7 @@ rule trimming:
     output:
         "data_trim/{sample}_trimmed.fq"
     container:
-        "docker://suzannegtx/trim-galore:0.6.4"
+        "docker://suzannegtx/trimgalore-cutadapt:0.6.4"
     shell:
         """
         trim_galore -q 20 --phred33 --length 25 {input} -O data_trim
@@ -68,7 +68,7 @@ rule mapping:
     output:
         "data_map/{sample}.bam"
     container:
-        "docker://suzannegtx/trim-galore:0.6.4"
+        "docker://suzannegtx/trimgalore-cutadapt:0.6.4"
     shell:
         """
         bowtie -p 4 -S -x index/indexation {input} | samtools sort -@ 4 -o {output}
