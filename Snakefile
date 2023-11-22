@@ -8,13 +8,7 @@ configfile:
 # Il exécutera récursivement toutes les règles nécessaires pour obtenir le fichier count
 rule all:
     input:
-        #"data_comptage/counts.txt"
-        "data_bam/SRR10379721.bam",
-        "data_bam/SRR10379722.bam",
-        "data_bam/SRR10379723.bam",
-        "data_bam/SRR10379724.bam",
-        "data_bam/SRR10379725.bam",
-        "data_bam/SRR10379726.bam"
+        "data_comptage/counts.txt"
 
 # Téléchargement des 6 échantillons à analyser
 rule downloading:
@@ -28,8 +22,7 @@ rule downloading:
         "logs/downloading/{sample}.log"
     shell:
         """
-        (fasterq-dump --threads 8 --progress {wildcards.sample} -O data
-        rm {input}) 2> {log}
+        (fasterq-dump --threads 8 --progress {wildcards.sample} -O data) 2> {log}
         """
 
 # Découpe des morceaux d'échantillons qui sont trop incertains et élimination des échantillons de moins de 25 nucléotides
@@ -168,7 +161,7 @@ rule counting:
 # Analyse des échantillons en connaissant le nom des gènes
 #rule analysis:
 #    input:
-#        "data40000compt/counts.txt"
+#        "data_comptage/counts.txt"
 #    output:
 #        "je ne sais vraiment plus"
 #    script:
