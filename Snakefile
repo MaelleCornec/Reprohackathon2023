@@ -8,21 +8,28 @@ configfile:
 # Il exécutera récursivement toutes les règles nécessaires pour obtenir le fichier count
 rule all:
     input:
-        "data_comptage/counts.txt"
+        #"data_comptage/counts.txt"
+        "data_bam/SRR10379721.bam",
+        "data_bam/SRR10379722.bam",
+        "data_bam/SRR10379723.bam",
+        "data_bam/SRR10379724.bam",
+        "data_bam/SRR10379725.bam",
+        "data_bam/SRR10379726.bam"
 
 # Téléchargement des 6 échantillons à analyser
 rule downloading:
     output:
         "data/{sample}.fastq"
     message:
-        "Téléchargement de {sample}"
+        "Téléchargement de {wildcards.sample}"
     container:
-        "docker://pegi3s/sratoolkit:2.10.0"
+        "docker://suzannegtx/sra-toolkit:2.10.0"
     log:
         "logs/downloading/{sample}.log"
     shell:
         """
-        fasterq-dump --threads 8 --progress {wildcards.sample} -O data
+        (fasterq-dump --threads 8 --progress {wildcards.sample} -O data
+        rm {input}) 2> {log}
         """
 
 # Découpe des morceaux d'échantillons qui sont trop incertains et élimination des échantillons de moins de 25 nucléotides
@@ -32,14 +39,14 @@ rule trimming:
     output:
         "data_trim/{sample}_trimmed.fq"
     message:
-        "Nettoyage de {sample}"
+        "Nettoyage de {wildcards.sample}"
     container:
         "docker://suzannegtx/trimgalore-cutadapt:0.6.4"
     log:
         "logs/trimming/{sample}.log"
     shell:
         """
-        trim_galore -q 20 --phred33 --length 25 {input} -O data_trim
+        (trim_galore -q 20 --phred33 --length 25 {input} -O data_trim) 2> {log}
         """
 
 # Téléchargement du génome de référence dans un dossier reference
@@ -54,7 +61,7 @@ rule genome:
         "logs/downloading/reference/fasta.log"
     shell:
         """
-        wget -q -O {output} "{params}"
+        (wget -q -O {output} "{params}") 2> {log}
         """
 
 # Création de l'index sur le génome de référence
@@ -71,25 +78,58 @@ rule indexing:
         "logs/indexation.log"
     shell: 
         """
-        bowtie-build {input} {output}
+        (bowtie-build {input} {output}) 2> {log}
+        """
+
+# Création des fichiers sam
+rule samming:
+    input:
+        "data_trim/{sample}_trimmed.fq"
+    output:
+        "data_sam/{sample}.sam"
+    message:
+        "Première étape du mapping de {wildcards.sample}"
+    container:
+        "docker://suzannegtx/bowtie:0.12.7"
+    log:
+        "logs/samming/{sample}.log"
+    shell:
+        """
+        (bowtie -S -x index/indexation {input} > {output}) 2> {log}
+        """
+
+# Création des fichiers bam
+rule bamming:
+    input:
+        "data_sam/{sample}.sam"
+    output:
+        "data_bam/{sample}.bam"
+    message:
+        "Deuwième étape du mapping de {wildcards.sample}"
+    container:
+        "docker://pegi3s/samtools_bcftools:1.9"
+    log:
+        "logs/bamming/{sample}.log"
+    shell:
+        """
+        (samtools sort -O bam -o {output} {input}) 2> {log}
         """
 
 # Cartographie des échantillons grâce à l'index fait sur le génome de référence
 rule mapping:
     input:
-        "data_trim/{sample}_trimmed.fq"      
+        "data_bam/{sample}.bam"      
     output:
-        "data_map/{sample}.bam"
+        "data_bam/{sample}.bam.bai"
     message:
-        "Mapping de {sample}"
+        "Troisième étape du mapping de {wildcards.sample}"
     container:
-        "docker://suzannegtx/bowtie:0.12.7"
+        "docker://pegi3s/samtools_bcftools:1.9"
     log:
         "logs/mapping/{sample}.log"
     shell:
         """
-        bowtie -p 4 -S -x index/indexation {input} | samtools sort -@ 4 -o {output}
-        samtools index {output}
+        (samtools index {input}) 2> {log}
         """
 
 # Téléchargement des annotations du génome de référence dans un dossier reference
@@ -104,7 +144,7 @@ rule annotation_gen:
         "logs/downloading/reference/gff.log" 
     shell:
         """
-        wget -O {output} "{params}"
+        (wget -O {output} "{params}") 2> {log}
         """
 
 # Dénombrement des motifs présents sur les échantillons grâce aux annotations du génome de référence
@@ -122,7 +162,7 @@ rule counting:
         "logs/counting.log"
     shell:
         """
-        featureCounts --extraAttributes Name -t gene -g ID -s 1 -F GTF -T 4 -a {input.ref} -o {output} {input.ech}
+        (featureCounts --extraAttributes Name -t gene -g ID -s 1 -F GTF -T 4 -a {input.ref} -o {output} {input.ech}) 2> {log}
         """
 
 # Analyse des échantillons en connaissant le nom des gènes
