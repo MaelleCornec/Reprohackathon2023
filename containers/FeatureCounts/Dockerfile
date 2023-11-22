@@ -11,10 +11,8 @@ RUN wget https://downloads.sourceforge.net/project/subread/subread-1.4.6-p3/subr
 RUN tar xzf subread-1.4.6-p3-Linux-x86_64.tar.gz
 
 # Ajout du répertoire contenant featureCounts à la variable PATH
-ENV PATH="/subread-1.4.6-p3-Linux-x86_64/bin:${PATH}"
+#ENV PATH="/subread-1.4.6-p3-Linux-x86_64/bin:${PATH}"
+ENV PATH="$PATH:/subread-1.4.6-p3-Linux-x86_64/bin"
 
 # Suppression des fichiers temporaires et inutiles
 RUN rm -rf subread-1.4.6-p3-Linux-x86_64.tar.gz
-
-# Commande par défaut à exécuter lorsque le conteneur démarre
-CMD ["featureCounts"]
