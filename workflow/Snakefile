@@ -1,6 +1,6 @@
 # Chargement du fichier de configuration config.yaml
 configfile:
-    "config.yaml"
+    "config/config.yaml"
 
 # Snakemake définit par défaut la première règle comme la cible.
 # A l'état actuel, je n'ai pas encore inclus les script python dans le snakefile, donc ma cible est le fichier count.
@@ -62,7 +62,12 @@ rule indexing:
     input:
         "genome/reference.fasta"
     output:
-        "index/indexation"
+        "index/indexation.1.ebwt",
+        "index/indexation.2.ebwt",
+        "index/indexation.3.ebwt",
+        "index/indexation.4.ebwt",
+        "index/indexation.rev.1.ebwt",
+        "index/indexation.rev.2.ebwt"
     message:
         "Indexation du génome de référence"
     container:
@@ -71,13 +76,19 @@ rule indexing:
         "logs/indexation.log"
     shell: 
         """
-        (bowtie-build {input} {output}) 2> {log}
+        (bowtie-build {input} index/indexation) 2> {log}
         """
 
 # Création des fichiers sam
 rule samming:
     input:
-        "data_trim/{sample}_trimmed.fq"
+        ech={"data_trim/{sample}_trimmed.fq"},
+        ind={"index/indexation.1.ebwt",
+        "index/indexation.2.ebwt",
+        "index/indexation.3.ebwt",
+        "index/indexation.4.ebwt",
+        "index/indexation.rev.1.ebwt",
+        "index/indexation.rev.2.ebwt"}
     output:
         "data_sam/{sample}.sam"
     message:
@@ -88,7 +99,7 @@ rule samming:
         "logs/samming/{sample}.log"
     shell:
         """
-        (bowtie -S -x index/indexation {input} > {output}) 2> {log}
+        (bowtie -x -s index/indexation {input.ech} -S {output}) 2> {log}
         """
 
 # Création des fichiers bam
@@ -143,7 +154,8 @@ rule annotation_gen:
 # Dénombrement des motifs présents sur les échantillons grâce aux annotations du génome de référence
 rule counting:
     input:
-        ech=expand("data_map/{sample}.bam", sample=config["samples"]),
+        bam=expand("data_bam/{sample}.bam", sample=config["samples"]),
+        bai=expand("data_bam/{sample}.bam.bai", sample=config["samples"]),
         ref="genome/reference.gff"
     output:
         "data_comptage/counts.txt"
@@ -155,7 +167,7 @@ rule counting:
         "logs/counting.log"
     shell:
         """
-        (featureCounts --extraAttributes Name -t gene -g ID -s 1 -F GTF -T 4 -a {input.ref} -o {output} {input.ech}) 2> {log}
+        (featureCounts -t gene -g ID -s 1 -F GTF -T 4 -a {input.ref} -o {output} {input.bam}) 2> {log}
         """
 
 # Analyse des échantillons en connaissant le nom des gènes
