@@ -8,7 +8,7 @@ configfile:
 # Il exécutera récursivement toutes les règles nécessaires pour obtenir le fichier count
 rule all:
     input:
-        "data_comptage/counts.txt"
+        "result.png"
 
 # Téléchargement des 6 échantillons à analyser
 rule downloading:
@@ -163,10 +163,16 @@ rule counting:
         """
 
 # Analyse des échantillons en connaissant le nom des gènes
-#rule analysis:
-#    input:
-#        "data_comptage/counts.txt"
-#    output:
-#        "je ne sais vraiment plus"
-#    script:
-#        "analysis.py"
+rule analysis:
+    input:
+        "data_comptage/counts.txt"
+    output:
+        "result.png"
+    message:
+        "Réalisation des figures"
+    container:
+        "docker://suzannegtx/R:3.2"
+    log:
+        "logs/analysis.log"
+    script:
+        "scripts/script.R"
