@@ -1,0 +1,12 @@
+Status	data_bam/SRR10379721.bam	data_bam/SRR10379722.bam	data_bam/SRR10379723.bam	data_bam/SRR10379724.bam	data_bam/SRR10379725.bam	data_bam/SRR10379726.bam
+Assigned	24350554	20432679	18273851	22295521	26187623	6428016
+Unassigned_Ambiguity	778112	665753	588991	654209	797319	244827
+Unassigned_MultiMapping	0	0	0	0	0	0
+Unassigned_NoFeatures	7807041	6087478	5657635	8889954	8692658	3070005
+Unassigned_Unmapped	18970001	17014092	15129599	15455539	10561553	17278541
+Unassigned_MappingQuality	0	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0	0
+Unassigned_Secondary	0	0	0	0	0	0
+Unassigned_Nonjunction	0	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0	0
