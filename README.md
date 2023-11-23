@@ -1,25 +1,105 @@
-# Reprohackathon2023
-Repôt pour le projet dans le cadre de l'UC Reprohackathon - Formation IODAA APT/U. P-S
+# Reprohackathon
 
-Idée pour créer le workflow : 
-    * Créer les conteneurs suivants (nom de l'image : description):
-        * cutadapt version 1.11 ??? Seuls les séquences de plus de 25 nucléotides ont été considérés pour la suite.
-        Est-ce que c'est la même chose que TrimGalore ?
-        * trimGalore:v1 : un conteneur pour créer un environnement où l'outil TrimDalore sera utilisé.
-        * bowtie:v1 : un conteneur pour créer un environnement où la version 0.12.7 avec ses paramètres par défaut de l'outil Bowtie sera utilisé.
-        * featureCount:v1 : un conteneur pour créer un environnement où la version 1.4.6-p3 avec ses paramètres par défaut de l'outil Bowtie sera utilisé (from Subreads package (parameters: -t gene -g ID -s 1) Je ne sais paq ce que ça veut dire ???).
-        * deSeq2:v1 : un conteneur pour créer un environnement où la version 1.16 avec ses paramètres par défaut de l'outil DESeq2 sera utilisé.
-    * Créer les scripts (python ou bash ou etc.) pour chaque étape du workflow :
-        * trimming.py : le script pour éliminer les séquences de moins de 25 nucléotides les nucléotides pas assez précis (ce n'est pas obligé d'être en pyhthon mais c'est pour l'idée).
-        * indexing.py : le script pour créer les index vis-à-vis du génôme de référence.
-        * mapping.py : le script pour poser des index sur les séquences téléchargées.
-        * counting.py : le script pour compter les motifs (je ne suis pas sure de comprendre ce qu'il se passe ici).
-        * analysis.py (ou peut-être analysis.r avec R version 3.4.1 ?) : le script pour l'analyse des données (enfin !) 
-    * Créer le worflow prenant en compte tous ces conteneurs et les scripts d'analyse des fichiers fastq initiaux.
+Repôt pour le projet dans le cadre de l'UC Reprohackathon.   
+Formation IODAA AgroParisTech / Université Paris-Saclay.
 
-Information pour plus tard (extrait de l'article) :
-"For over-representation analysis, S. aureus KEGG gene-sets were
-downloaded thanks to the EnrichmentBrowser R package version 2.14.3 (organism
-code sao). All the 106 KEGG sets were then tested for the over-representation in
-differentially expressed genes using the Fisher statistical test. Only gene-sets with a
-FDR lower than 0.05 were considered significantly enriched."
+## Table des matières
+
+- Reprohackathon
+    - Table des matières
+    - Membres du groupe
+    - Description du contexte
+    - Description du projet
+    - Réalisations
+    - Résultats obtenus
+    - Conclusion
+
+## Membres du groupe
+
+- Maëlle CORNEC
+- Suzanne GUILTEAUX
+- Mathieu GUIMONT
+- Gabriel CLEREMPUY
+
+## Description du contexte
+
+Ce cours a pour objectif de reproduire les résultats obtenus dans l'article *Intracellular Staphylococcus aureus persisters upon antibiotic exposure. Frédéric Peyrusson et al. Nat Commun. 2020 May 4;11(1):2200*.  
+En particulier, l'objectif était de reproduire certaines figures de l'article :
+- [A COMPLETER]
+
+Les premières séances ont servi à : 
+- introduire la problématique de la reproductibilté en bio-informatique.
+- se familiariser avec les outils qui seront à notre disposition pour la réalisation du projet :
+    - le fonctionnement des machines virtuelles ;
+    - le fonctionnement de VScode ;
+    - la création d'environnemnt fermés par le biais de containers : Docker ;
+    - la création d'un workflow : Snakemake.
+Les séances suivantes étaient consacrées à la réalisation du projet lui-même.  
+
+### Contexte de l'article
+
+L'article porte sur les **cellules persistantes bactériennes**.
+- **Variants phénotypiques** :
+    - état de non-croissance transitoire 
+    - tolérance aux antibiotiques
+- Généralement mis en évidence par des courbes de destruction biphasique :
+    - une grande partie de la population bactérienne est sensible et rapidement tuée
+    - une sous-population a un « killing rate » plus faible et persiste pendant une période beaucoup plus longue 🡪 « persisters »
+- Persistance **non transmise génétiquement** (contrairement à la résistance)
+- Phénotype **stable mais réversible** lors de l'élimination de l'antibiotique.  
+
+Plus particulièrement, il s'intéresse au **cas du Staphylocoque doré**.
+- Présence de S. aureus dans des cellules hôtes après un traitement antibiotique
+    - suivi de sa dynamique de réplication et de sa division bactérienne grâce à des méthodes de fluorescence
+    - observation d’un cas de destruction biphasique rapidement suivi d’un état non croissant et non répondant s’arrêtant avec l’arrêt du traitement
+    🡺 Ce sont des **persisters**.   
+- Les persisters :
+    - **métaboliquement actifs** 
+    - mais un **profil transcriptomique altéré** qui correspond à l'activation des réponses au stress
+    - **multirésistance aux médicaments** grâce aux réponses adaptatives redondantes
+
+### Résumé de l'article  
+
+- **Objectif** : 
+    - Comprendre les facteurs qui conduisent au switch de S. aureus vers le phénotype persistant et la tolérance aux antibiotiques. 
+- **Méthodes** :
+    - Fluorescence pour suivre la dynamique de S. aureus au sein de cellules hôtes.
+    - Séquençage ARN pour connaître l’activité métabolique de S. aureus lors de cet état de persistance.
+- **Résultats** :
+    - Présence de variants phénotypiques persistants de S. aureus après un traitement antibiotique.
+    - Réponse caractéristique de persisters.
+    - Les persisters subissent une reprogrammation transcriptomique majeure et sont métaboliquement actifs.
+    - Les persisters ajustent leur métabolisme carboné central (sans qu’il y ait de limitations sur l’ATP ou les acides aminés disponibles) et redirige leur transcription au profit d’un réseau de réponses adaptatives.
+    - Les persisters sont capables de résister à plusieurs types d’antibiotiques alors qu’ils n’en ont été exposés qu’à un seul.
+- **Hypothèse** :
+    - Les persistants intracellulaires de S. aureus pourraient constituer un réservoir pour les infections récidivantes et ainsi contribuer à l’échec de traitements.
+
+### Résultats de l'article
+
+**Gènes exprimés différemment**
+
+- 1477 DEG :
+    - **710 régulés *positivement*** :
+        - Résistance au stress et à la famine (traduction toujours active).
+        - Augmentation du métabolisme du galactose.
+    - **767 régulés *négativement*** :
+        - Baisse de l’activité métabolique lié à la prolifération (phosphorylation oxydative, métabolisme des nucléotides)
+
+- Trois stimulons :
+    - **SR (Stringent Response)** : (transitoire) traduction de (p)ppGpp inhibant indirectement des gènes.
+    - **CWSS** : en réponse au stress de la paroi, les gènes impliqués tardivement dans la synthèse de peptidoglycanes sont stimulés.
+    - **SOS** : stimulation de gènes impliqués dans la réparation par excision de l’ADN.
+
+## Description du projet
+
+- Création d'un workflow analysant les 6 séquences génétiques du Staphylocoque doré.
+    - Téléchargement des séquences
+    - Création des containers utiles à l'analyse.
+    - Création des scripts d'analyse des séquences.
+    - Intégration de ces éléments dans le workflow.
+
+## Réalisations
+
+## Résultats obtenus
+
+## Conclusion
