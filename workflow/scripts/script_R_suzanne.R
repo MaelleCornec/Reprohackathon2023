@@ -45,7 +45,6 @@ dds$Type <- relevel(dds$Type, ref = "control")
 dds_post <- DESeq(dds)
 res <- results(dds_post, alpha = 0.05) #stockage des résultats 
 
-
 # MA-plot pour l'ensemble du dataset
 dev.size()
 diff.df %>% ggplot(aes(x = baseMean, y = log2FoldChange, col = padj < 0.1)) + #coloration des points selon la significativité stats
@@ -57,7 +56,3 @@ diff.df %>% ggplot(aes(x = baseMean, y = log2FoldChange, col = padj < 0.1)) + #c
   xlab("Mean of normalized counts")
 ggsave(snakemake@output[[2]]) #sauvegarde des résultats
 dev.off()
-
-
-
-
