@@ -1,0 +1,107 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job         count    min threads    max threads
+--------  -------  -------------  -------------
+all             1              1              1
+counting        1              1              1
+indexing        1              1              1
+mapping         6              1              1
+trimming        6              1              1
+total          15              1              1
+
+Select jobs to execute...
+
+[Wed Nov 15 00:59:49 2023]
+rule trimming:
+    input: data40000/SRR10379721.fastq
+    output: data_trim/SRR10379721_trimmed.fq
+    jobid: 5
+    wildcards: sample=SRR10379721
+    resources: tmpdir=/tmp
+
+
+[Wed Nov 15 00:59:49 2023]
+rule indexing:
+    input: genome/reference.fasta
+    output: index/indexation
+    jobid: 3
+    resources: tmpdir=/tmp
+
+
+[Wed Nov 15 00:59:49 2023]
+rule trimming:
+    input: data40000/SRR10379722.fastq
+    output: data_trim/SRR10379722_trimmed.fq
+    jobid: 7
+    wildcards: sample=SRR10379722
+    resources: tmpdir=/tmp
+
+
+[Wed Nov 15 00:59:49 2023]
+rule trimming:
+    input: data40000/SRR10379724.fastq
+    output: data_trim/SRR10379724_trimmed.fq
+    jobid: 11
+    wildcards: sample=SRR10379724
+    resources: tmpdir=/tmp
+
+
+[Wed Nov 15 00:59:49 2023]
+rule trimming:
+    input: data40000/SRR10379723.fastq
+    output: data_trim/SRR10379723_trimmed.fq
+    jobid: 9
+    wildcards: sample=SRR10379723
+    resources: tmpdir=/tmp
+
+[Wed Nov 15 00:59:49 2023]
+Error in rule indexing:
+    jobid: 3
+    output: index/indexation
+    shell:
+        bowtie-build genome/reference.fasta index/indexation
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+
+[Wed Nov 15 00:59:49 2023]
+rule trimming:
+    input: data40000/SRR10379725.fastq
+    output: data_trim/SRR10379725_trimmed.fq
+    jobid: 13
+    wildcards: sample=SRR10379725
+    resources: tmpdir=/tmp
+
+
+[Wed Nov 15 00:59:49 2023]
+rule trimming:
+    input: data40000/SRR10379726.fastq
+    output: data_trim/SRR10379726_trimmed.fq
+    jobid: 15
+    wildcards: sample=SRR10379726
+    resources: tmpdir=/tmp
+
+[Wed Nov 15 00:59:49 2023]
+Finished job 9.
+1 of 15 steps (7%) done
+[Wed Nov 15 00:59:49 2023]
+Finished job 13.
+2 of 15 steps (13%) done
+[Wed Nov 15 00:59:49 2023]
+Finished job 11.
+3 of 15 steps (20%) done
+[Wed Nov 15 00:59:49 2023]
+Finished job 7.
+4 of 15 steps (27%) done
+[Wed Nov 15 00:59:49 2023]
+Finished job 15.
+5 of 15 steps (33%) done
+[Wed Nov 15 00:59:49 2023]
+Finished job 5.
+6 of 15 steps (40%) done
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /home/ubuntu/Reprohackathon2023/.snakemake/log/2023-11-15T005949.085945.snakemake.log

@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 60 of /home/ubuntu/Reprohackathon2023/Snakefile:
+Missing input files for rule mapping:
+index/indexation

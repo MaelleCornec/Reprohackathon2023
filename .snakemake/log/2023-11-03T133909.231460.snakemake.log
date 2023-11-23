@@ -1,0 +1,24 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job         count    min threads    max threads
+--------  -------  -------------  -------------
+counting        1              1              1
+total           1              1              1
+
+Select jobs to execute...
+
+[Fri Nov  3 13:39:09 2023]
+rule counting:
+    input: data40000map/SRR10379721.bam, data40000map/SRR10379722.bam, data40000map/SRR10379723.bam, data40000map/SRR10379724.bam, data40000map/SRR10379725.bam, data40000map/SRR10379726.bam, reference/genome.gff
+    output: data40000compt/counts.txt
+    jobid: 0
+    resources: tmpdir=/tmp
+
+[Fri Nov  3 13:39:09 2023]
+Finished job 0.
+1 of 1 steps (100%) done
+Complete log: /home/ubuntu/Reprohackathon2023/.snakemake/log/2023-11-03T133909.231460.snakemake.log

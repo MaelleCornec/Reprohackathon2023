@@ -1,0 +1,13 @@
+samples:
+  SRR10379721: data40000/SRR10379721.fastq
+  SRR10379722: data40000/SRR10379722.fastq
+  SRR10379723: data40000/SRR10379723.fastq
+  SRR10379724: data40000/SRR10379724.fastq
+  SRR10379725: data40000/SRR10379725.fastq
+  SRR10379726: data40000/SRR10379726.fastq
+
+linkfasta:
+  https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP000253.1&rettype=fasta
+
+linkgff:
+  https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1

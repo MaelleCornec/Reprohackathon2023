@@ -1,0 +1,29 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job         count    min threads    max threads
+--------  -------  -------------  -------------
+indexing        1              1              1
+total           1              1              1
+
+Select jobs to execute...
+
+[Fri Nov  3 11:54:50 2023]
+rule indexing:
+    input: reference/genome.fasta
+    output: index/indexation
+    jobid: 0
+    resources: tmpdir=/tmp
+
+Waiting at most 5 seconds for missing files.
+MissingOutputException in line 20 of /home/ubuntu/Reprohackathon2023/Snakefile:
+Job Missing files after 5 seconds:
+index/indexation
+This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait.
+Job id: 0 completed successfully, but some output files are missing. 0
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /home/ubuntu/Reprohackathon2023/.snakemake/log/2023-11-03T115449.844270.snakemake.log

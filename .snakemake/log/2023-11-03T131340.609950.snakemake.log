@@ -1,0 +1,34 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job         count    min threads    max threads
+--------  -------  -------------  -------------
+trimming        1              1              1
+total           1              1              1
+
+Select jobs to execute...
+
+[Fri Nov  3 13:13:41 2023]
+rule trimming:
+    input: data40000/SRR10379721.fastq, data40000/SRR10379722.fastq, data40000/SRR10379723.fastq, data40000/SRR10379724.fastq, data40000/SRR10379725.fastq, data40000/SRR10379726.fastq
+    output: SRR10379721_trimmed.fq SRR10379721.fastq_trimming_report.txt, SRR10379722_trimmed.fq SRR10379722.fastq_trimming_report.txt, SRR10379723_trimmed.fq SRR10379723.fastq_trimming_report.txt, SRR10379724_trimmed.fq SRR10379724.fastq_trimming_report.txt, SRR10379725_trimmed.fq SRR10379725.fastq_trimming_report.txt, SRR10379726_trimmed.fq SRR10379726.fastq_trimming_report.txt
+    jobid: 0
+    resources: tmpdir=/tmp
+
+Waiting at most 5 seconds for missing files.
+MissingOutputException in line 32 of /home/ubuntu/Reprohackathon2023/Snakefile:
+Job Missing files after 5 seconds:
+SRR10379721_trimmed.fq SRR10379721.fastq_trimming_report.txt
+SRR10379722_trimmed.fq SRR10379722.fastq_trimming_report.txt
+SRR10379723_trimmed.fq SRR10379723.fastq_trimming_report.txt
+SRR10379724_trimmed.fq SRR10379724.fastq_trimming_report.txt
+SRR10379725_trimmed.fq SRR10379725.fastq_trimming_report.txt
+SRR10379726_trimmed.fq SRR10379726.fastq_trimming_report.txt
+This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait.
+Job id: 0 completed successfully, but some output files are missing. 0
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /home/ubuntu/Reprohackathon2023/.snakemake/log/2023-11-03T131340.609950.snakemake.log
