@@ -1,3 +1,8 @@
+# Activation snakemake
+conda activate 
+conda activate snakemake 
+
+# Installation singularity
 sudo apt update
 sudo apt install -y wget
 cd /tmp
