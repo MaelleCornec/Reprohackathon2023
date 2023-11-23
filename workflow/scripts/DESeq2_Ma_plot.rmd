@@ -1,0 +1,91 @@
+---
+title: "MA plot"
+author: "Gabriel Clérempuy"
+date: "2023-11-03"
+output: html_document
+---
+```{r setup, include=FALSE}
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(BiocManager)
+library(DESeq2)
+```
+```{r}
+Full_DATA <- read.csv("GSE139659_IPvsctrl.complete.csv", header = TRUE, sep = ";")
+colonnes_selectionnees_Full_DATA <- Full_DATA[, c("ctrl4", "ctrl5", "ctrl6", "IP1", "IP2", "IP3")]
+
+colonnes_selectionnees_Full_DATA<-na.omit(colonnes_selectionnees_Full_DATA)
+
+```
+```{r}
+dds_full <- DESeqDataSetFromMatrix(countData = colonnes_selectionnees_Full_DATA[c("ctrl4", "ctrl5", "ctrl6", "IP1", "IP2", "IP3")],
+                              colData = DataFrame(condition =c("Control","Control","Control",
+                                                                          "Treatment","Treatment","Treatment")),
+                              design = ~ condition)
+```
+```{r}
+# Normalisation DESeq2
+dds_full<- estimateSizeFactors(dds_full)
+dds_full <- DESeq(dds_full)
+
+# Estimation des dispersions
+dds_full <- estimateDispersions(dds_full)
+
+
+dds_full <- DESeq(dds_full)
+res1 <- results(dds_full)
+```
+```{r}
+
+res1$baseMean <- rowMeans(counts(dds_full))
+res1$baseMean <- log2(res1$baseMean)
+
+plotMA(res1, main = "MA-plot with DESeq2, all the genes", ylim = c(-4, 4), x="Log2(mean of normalized counts)")
+```
+```{r}
+#***************************************************************************************
+#***************************************************************************************
+#*#***************************************************************************************
+#*#***************************************************************************************
+
+```
+```{r}
+noms_genes <- read.csv("Gene_Names_1col_true.csv", header = TRUE, sep = ";")
+GENES_TRANSLATION_DATA <- Full_DATA %>%
+  filter(Name %in% noms_genes$Name)
+
+colonnes_selectionnees_TRANSLATION_DATA<- GENES_TRANSLATION_DATA[, c("ctrl4", "ctrl5", "ctrl6", "IP1", "IP2", "IP3")]
+
+colonnes_selectionnees_TRANSLATION_DATA<-na.omit(colonnes_selectionnees_TRANSLATION_DATA)
+
+```
+```{r}
+dds_genes <- DESeqDataSetFromMatrix(countData = colonnes_selectionnees_TRANSLATION_DATA[c("ctrl4", "ctrl5", "ctrl6", "IP1", "IP2", "IP3")],
+                              colData = DataFrame(condition =c("Control","Control","Control",
+                                                                          "Treatment","Treatment","Treatment")),
+                              design = ~ condition)
+```
+```{r}
+# Normalisation DESeq2
+dds_genes <- DESeq(dds_genes)
+
+res_genes <- results(dds_genes)
+
+res_genes$baseMean <- rowMeans(counts(dds_genes))
+res_genes$baseMean <- log2(res_genes$baseMean)
+```
+
+
+```{r}
+plotMA(res_genes, main = "MA-plot with DESeq2, translation genes",ylim = c(-6, 5), x="Log2(mean of normalized counts)") 
+```
