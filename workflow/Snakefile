@@ -11,19 +11,19 @@ rule all:
         "data_comptage/counts.txt"
 
 # Téléchargement des 6 échantillons à analyser
-#rule downloading:
-#    output:
-#        "data/{sample}.fastq"
-#    message:
-#        "Téléchargement de {wildcards.sample}"
-#    container:
-#        "docker://suzannegtx/sra-toolkit:2.10.0"
-#    log:
-#        "logs/downloading/{sample}.log"
-#    shell:
-#        """
-#        (fasterq-dump --threads 8 --progress {wildcards.sample} -O data) 2> {log}
-#        """
+rule downloading:
+    output:
+        "data/{sample}.fastq"
+    message:
+        "Téléchargement de {wildcards.sample}"
+    container:
+        "docker://suzannegtx/sra-toolkit:2.10.0"
+    log:
+        "logs/downloading/{sample}.log"
+    shell:
+        """
+        (fasterq-dump --threads 8 --progress {wildcards.sample} -O data) 2> {log}
+        """
 
 # Découpe des morceaux d'échantillons qui sont trop incertains et élimination des échantillons de moins de 25 nucléotides
 rule trimming:
