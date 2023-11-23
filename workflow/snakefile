@@ -50,11 +50,9 @@ rule genome:
         config["linkfasta"]
     message:
         "Téléchargement du génome de référence"
-    log:
-        "logs/downloading/reference/fasta.log"
     shell:
         """
-        (wget -q -O {output} "{params}") 2> {log}
+        wget -q -O {output} "{params}"
         """
 
 # Création de l'index sur le génome de référence
@@ -72,11 +70,9 @@ rule indexing:
         "Indexation du génome de référence"
     container:
         "docker://suzannegtx/bowtie:0.12.7"
-    log:
-        "logs/indexation.log"
     shell: 
         """
-        (bowtie-build {input} index/indexation) 2> {log}
+        bowtie-build {input} index/indexation
         """
 
 # Création des fichiers sam
@@ -112,11 +108,9 @@ rule bamming:
         "Deuwième étape du mapping de {wildcards.sample}"
     container:
         "docker://pegi3s/samtools_bcftools:1.9"
-    log:
-        "logs/bamming/{sample}.log"
     shell:
         """
-        (samtools sort -O bam -o {output} {input}) 2> {log}
+        samtools sort -O bam -o {output} {input}
         """
 
 # Cartographie des échantillons grâce à l'index fait sur le génome de référence
@@ -129,11 +123,9 @@ rule mapping:
         "Troisième étape du mapping de {wildcards.sample}"
     container:
         "docker://pegi3s/samtools_bcftools:1.9"
-    log:
-        "logs/mapping/{sample}.log"
     shell:
         """
-        (samtools index {input}) 2> {log}
+        samtools index {input}
         """
 
 # Téléchargement des annotations du génome de référence dans un dossier reference
@@ -145,7 +137,7 @@ rule annotation_gen:
     message:
         "Téléchargement des annotations du génome de référence"
     log:
-        "logs/downloading/reference/gff.log" 
+        "logs/downloading/reference_gff.log" 
     shell:
         """
         (wget -O {output} "{params}") 2> {log}
