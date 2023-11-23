@@ -1,4 +1,0 @@
-Building DAG of jobs...
-MissingInputException in line 54 of /home/ubuntu/Reprohackathon2023/Snakefile:
-Missing input files for rule mapping:
-data_trim/SRR10379721_trimmed.fq

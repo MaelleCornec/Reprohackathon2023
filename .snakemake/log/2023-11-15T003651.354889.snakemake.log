@@ -1,3 +1,0 @@
-WildcardError in line 85 of /home/ubuntu/Reprohackathon2023/Snakefile:
-No values given for wildcard 'sample'.
-  File "/home/ubuntu/Reprohackathon2023/Snakefile", line 85, in <module>
