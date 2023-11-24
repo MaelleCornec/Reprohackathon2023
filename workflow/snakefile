@@ -39,7 +39,8 @@ rule trimming:
         "logs/trimming/{sample}.log"
     shell:
         """
-        (trim_galore -q 20 --phred33 --length 25 {input} -O data_trim) 2> {log}
+        (trim_galore -q 20 --phred33 --length 25 {input} -O data_trim
+        rm {input}) 2> {log}
         """
 
 # Téléchargement du génome de référence dans un dossier reference
@@ -95,7 +96,8 @@ rule samming:
         "logs/samming/{sample}.log"
     shell:
         """
-        (bowtie -x -s index/indexation {input.ech} -S {output}) 2> {log}
+        (bowtie -x -s index/indexation {input.ech} -S {output}
+        rm {input.ech}) 2> {log}
         """
 
 # Création des fichiers bam
@@ -111,6 +113,7 @@ rule bamming:
     shell:
         """
         samtools sort -O bam -o {output} {input}
+        rm {input}
         """
 
 # Cartographie des échantillons grâce à l'index fait sur le génome de référence
@@ -150,7 +153,7 @@ rule counting:
         bai=expand("data_bam/{sample}.bam.bai", sample=config["samples"]),
         ref="genome/reference.gff"
     output:
-        "data_comptage/counts.txt"
+        "scripts/genes/counts.txt"
     message:
         "Dénombrement des motifs"
     container:
@@ -159,13 +162,13 @@ rule counting:
         "logs/counting.log"
     shell:
         """
-        (featureCounts -t gene -g ID -s 1 -F GTF -T 4 -a {input.ref} -o {output} {input.bam}) 2> {log}
+        (featureCounts -t gene -g ID -s 1 -a {input.ref} -o {output} {input.bam}) 2> {log}
         """
 
 # Analyse des échantillons en connaissant le nom des gènes
 rule analysis:
     input:
-        "data_comptage/counts.txt"
+        "scripts/genes/counts.txt"
     output:
         "reports/result.png"
     message:
