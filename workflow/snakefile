@@ -8,7 +8,7 @@ configfile:
 # Il exécutera récursivement toutes les règles nécessaires pour obtenir le fichier count
 rule all:
     input:
-        "result.png"
+        "reports/result.png"
 
 # Téléchargement des 6 échantillons à analyser
 rule downloading:
@@ -167,11 +167,11 @@ rule analysis:
     input:
         "data_comptage/counts.txt"
     output:
-        "result.png"
+        "reports/result.png"
     message:
         "Réalisation des figures"
     container:
-        "docker://suzannegtx/R:3.2"
+        "docker://pegi3s/r_deseq2:1.32.0_v2"
     log:
         "logs/analysis.log"
     script:
