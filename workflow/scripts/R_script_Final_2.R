@@ -5,7 +5,7 @@ library(BiocManager)
 library(DESeq2)
 library(factoextra)
 
-Full_DATA <- read.table("counts.txt", header = TRUE, skip=1)
+Full_DATA <- read.table("genes/counts.txt", header = TRUE, skip=1)
 Full_DATA$Geneid <- substring(Full_DATA$Geneid, first = 6)
 
 colonnes_selectionnees_Full_DATA <- Full_DATA[, c(7,8,9,10,11,12)]
@@ -148,7 +148,6 @@ legend("bottomleft", legend = c("Significatif", "Non-significatif", "AA-tRNA syn
 
 dev.off()
 
-
 # Calcul de l'ACP avec prcomp()
 resultat_acp_translation <- prcomp(GENES_TRANSLATION_DATA[,c(7,8,9,10,11,12)], scale. = TRUE)  # Utilisation de scale. = TRUE pour centrer et réduire les variables
 
@@ -159,6 +158,7 @@ summary(resultat_acp_translation)
 print(resultat_acp_translation)
 
 png("PCA_translation_genes.png", width = 800, height = 600)
+
 # Visualisation des cercles des variables dans le plan factoriel de l'ACP
 fviz_pca_var(resultat_acp_translation, col.var = "black") 
 dev.off()
