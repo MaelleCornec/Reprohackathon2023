@@ -178,4 +178,6 @@ rule analysis:
     log:
         "logs/analysis.log"
     script:
-        "scripts/script.R"
+        """
+        (scripts/R_script_Final_2.R) 2> {log}
+        """
