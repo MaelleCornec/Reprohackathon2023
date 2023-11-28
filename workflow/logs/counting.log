@@ -1,0 +1,84 @@
+
+        ==========     _____ _    _ ____  _____  ______          _____  
+        =====         / ____| |  | |  _ \|  __ \|  ____|   /\   |  __ \ 
+          =====      | (___ | |  | | |_) | |__) | |__     /  \  | |  | |
+            ====      \___ \| |  | |  _ <|  _  /|  __|   / /\ \ | |  | |
+              ====    ____) | |__| | |_) | | \ \| |____ / ____ \| |__| |
+        ==========   |_____/ \____/|____/|_|  \_\______/_/    \_\_____/
+	v1.4.6-p3
+
+//========================== featureCounts setting ===========================\\
+||                                                                            ||
+||             Input files : 6 BAM files                                      ||
+||                           S data_bam/SRR10379721.bam                       ||
+||                           S data_bam/SRR10379722.bam                       ||
+||                           S data_bam/SRR10379723.bam                       ||
+||                           S data_bam/SRR10379724.bam                       ||
+||                           S data_bam/SRR10379725.bam                       ||
+||                           S data_bam/SRR10379726.bam                       ||
+||                                                                            ||
+||             Output file : scripts/genes/counts.txt                         ||
+||             Annotations : genome/reference.gff (GTF)                       ||
+||                                                                            ||
+||                 Threads : 1                                                ||
+||                   Level : meta-feature level                               ||
+||              Paired-end : no                                               ||
+||         Strand specific : yes                                              ||
+||      Multimapping reads : not counted                                      ||
+|| Multi-overlapping reads : not counted                                      ||
+||                                                                            ||
+\\===================== http://subread.sourceforge.net/ ======================//
+
+//================================= Running ==================================\\
+||                                                                            ||
+|| Load annotation file genome/reference.gff ...                              ||
+||    Features : 2967                                                         ||
+||    Meta-features : 2967                                                    ||
+||    Chromosomes : 1                                                         ||
+||                                                                            ||
+|| Process BAM file data_bam/SRR10379721.bam...                               ||
+||    Single-end reads are included.                                          ||
+||    Assign reads to features...                                             ||
+||    Total reads : 51905708                                                  ||
+||    Successfully assigned reads : 24350554 (46.9%)                          ||
+||    Running time : 0.73 minutes                                             ||
+||                                                                            ||
+|| Process BAM file data_bam/SRR10379722.bam...                               ||
+||    Single-end reads are included.                                          ||
+||    Assign reads to features...                                             ||
+||    Total reads : 44200002                                                  ||
+||    Successfully assigned reads : 20432679 (46.2%)                          ||
+||    Running time : 0.61 minutes                                             ||
+||                                                                            ||
+|| Process BAM file data_bam/SRR10379723.bam...                               ||
+||    Single-end reads are included.                                          ||
+||    Assign reads to features...                                             ||
+||    Total reads : 39650076                                                  ||
+||    Successfully assigned reads : 18273851 (46.1%)                          ||
+||    Running time : 0.56 minutes                                             ||
+||                                                                            ||
+|| Process BAM file data_bam/SRR10379724.bam...                               ||
+||    Single-end reads are included.                                          ||
+||    Assign reads to features...                                             ||
+||    Total reads : 47295223                                                  ||
+||    Successfully assigned reads : 22295521 (47.1%)                          ||
+||    Running time : 0.68 minutes                                             ||
+||                                                                            ||
+|| Process BAM file data_bam/SRR10379725.bam...                               ||
+||    Single-end reads are included.                                          ||
+||    Assign reads to features...                                             ||
+||    Total reads : 46239153                                                  ||
+||    Successfully assigned reads : 26187623 (56.6%)                          ||
+||    Running time : 0.67 minutes                                             ||
+||                                                                            ||
+|| Process BAM file data_bam/SRR10379726.bam...                               ||
+||    Single-end reads are included.                                          ||
+||    Assign reads to features...                                             ||
+||    Total reads : 27021389                                                  ||
+||    Successfully assigned reads : 6428016 (23.8%)                           ||
+||    Running time : 0.35 minutes                                             ||
+||                                                                            ||
+||                         Read assignment finished.                          ||
+||                                                                            ||
+\\===================== http://subread.sourceforge.net/ ======================//
+

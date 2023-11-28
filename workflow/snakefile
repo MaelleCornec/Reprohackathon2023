@@ -175,9 +175,5 @@ rule analysis:
         "Réalisation des figures"
     container:
         "docker://pegi3s/r_deseq2:1.32.0_v2"
-    log:
-        "logs/analysis.log"
     script:
-        """
-        (scripts/R_script_Final_2.R) 2> {log}
-        """
+        "scripts/R_script_Final_2.R"
