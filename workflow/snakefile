@@ -60,7 +60,9 @@ rule trimming:
     shell:
         """
         (trim_galore -q 20 --phred33 --length 25 {input} -O data_trim
-        rm {input}) 2> {log}
+        rm {input}
+        mv data_trim/*.txt logs/trimming
+        rm data_trim) 2> {log}
         """
 
 # Téléchargement du génome de référence dans un dossier reference
@@ -182,7 +184,8 @@ rule counting:
         "logs/counting.log"
     shell:
         """
-        (featureCounts -t gene -g ID -s 1 -a {input.ref} -o {output} {input.bam}) 2> {log}
+        (featureCounts -t gene -g ID -s 1 -a {input.ref} -o {output} {input.bam}
+        rm data_bam) 2> {log}
         """
 
 # Analyse des échantillons en connaissant le nom des gènes
