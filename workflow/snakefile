@@ -8,25 +8,12 @@ configfile:
 # Il exécutera récursivement toutes les règles nécessaires pour obtenir le fichier count
 rule all:
     input:
-        "scripts/MA-plot_all_genes.png",
-        "scripts/PCA_all_genes.png",
-        "scripts/Volcano_plot_all_genes.png",
-        "scripts/MA-plot_translation_genes.png",
-        "scripts/PCA_translation_genes.png",
-        "scripts/Volcano_plot_translation_genes.png"
-    output:
         "reports/MA-plot_all_genes.png",
         "reports/PCA_all_genes.png",
         "reports/Volcano_plot_all_genes.png",
         "reports/MA-plot_translation_genes.png",
         "reports/PCA_translation_genes.png",
         "reports/Volcano_plot_translation_genes.png"
-    message:
-        "Déplacement des figures dans le dossier reports"
-    shell:
-        """
-        mv scripts/*.png reports
-        """
 
 # Téléchargement des 6 échantillons à analyser
 rule downloading:
@@ -192,12 +179,12 @@ rule analysis:
         "scripts/genes/counts.txt",
         "scripts/genes/Gene_Names_1col_true.csv"
     output:
-        "scripts/MA-plot_all_genes.png",
-        "scripts/PCA_all_genes.png",
-        "scripts/Volcano_plot_all_genes.png",
-        "scripts/MA-plot_translation_genes.png",
-        "scripts/PCA_translation_genes.png",
-        "scripts/Volcano_plot_translation_genes.png"
+        "reports/MA-plot_all_genes.png",
+        "reports/PCA_all_genes.png",
+        "reports/Volcano_plot_all_genes.png",
+        "reports/MA-plot_translation_genes.png",
+        "reports/PCA_translation_genes.png",
+        "reports/Volcano_plot_translation_genes.png"
     message:
         "Réalisation des figures"
     container:
