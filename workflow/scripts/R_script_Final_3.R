@@ -3,14 +3,14 @@ library(ggplot2)
 library(dplyr)
 library(BiocManager)
 library(DESeq2)
-library(factoextra)
-library(rstudioapi)
+#library(factoextra)
+#library(rstudioapi)
 
 #Mise en place du working directory|le dossier dans lequel se situe le script
-current_directory <- dirname(rstudioapi::getSourceEditorContext()$path)
-setwd(current_directory)
+#current_directory <- dirname(rstudioapi::getSourceEditorContext()$path)
+#setwd(current_directory)
 
-Full_DATA <- read.table("counts.txt", header = TRUE, skip=1)
+Full_DATA <- read.table("scripts/genes/counts.txt", header = TRUE, skip=1)
 #On retire les 5 premiers caractères correspondant au mot "gene-" dans Full_DATA
 #On fait ça pour pouvoir connecter les noms des gènes dans Full_DATA et dans le fichiers des noms des gènes de la traduction
 Full_DATA$Geneid <- substring(Full_DATA$Geneid, first = 6)
@@ -33,7 +33,7 @@ res1 <- results(dds_full)
 res1$baseMean <- log2(res1$baseMean)
 
 #Plot classique du MA-plot sans utiliser la fonction MA-plot
-png("MA-plot_all_genes.png", width = 800, height = 800)
+png("reports/MA-plot_all_genes.png", width = 800, height = 800)
 
 plot(x=res1$baseMean, y=res1$log2FoldChange, main="MA-plot, all genes", ylim = c(-6, 5), cex=0.9)
 points(res1$baseMean, cex=0.50, pch=16, res1$log2FoldChange, col = ifelse(res1$pvalue < 0.05, "red", "black"))
@@ -43,22 +43,22 @@ legend("bottomleft", legend = c("Significatif", "Non-significatif"), pch = 16, c
 
 dev.off()
 
-png("PCA_all_genes.png", width = 800, height = 600)
+#png("reports/PCA_all_genes.png", width = 800, height = 600)
 # Calcul de l'ACP avec prcomp()
-resultat_acp <- prcomp(colonnes_selectionnees_Full_DATA, scale. = TRUE)  # Utilisation de scale. = TRUE pour centrer et réduire les variables
+#resultat_acp <- prcomp(colonnes_selectionnees_Full_DATA, scale. = TRUE)  # Utilisation de scale. = TRUE pour centrer et réduire les variables
 
 # Résumé des résultats de l'ACP
-summary(resultat_acp)
+#summary(resultat_acp)
 
 # Affichage des composantes principales
-print(resultat_acp)
+#print(resultat_acp)
 
 # Visualisation des cercles des variables dans le plan factoriel de l'ACP
-fviz_pca_var(resultat_acp, col.var = "black") 
-dev.off()
+#fviz_pca_var(resultat_acp, col.var = "black") 
+#dev.off()
 
 #Volcano plot: Log2FoldChange en fonction de la p-value
-png("Volcano_plot_all_genes.png", width = 800, height = 600)
+png("reports/Volcano_plot_all_genes.png", width = 800, height = 600)
 
 plot(x=res1$log2FoldChange, y=-log10(res1$pvalue), main="Volcano-plot, all genes", ylim = c(0, 65), cex=0.01)
 
@@ -72,7 +72,7 @@ resultat_final <- res1[indices, c("log2FoldChange", "baseMean", "pvalue")]
 GENES_TRANSLATION_DATA <- Full_DATA[indices, c(1,2,3,4,5,6,7,8,9,10,11,12)]
 
 #Plot classique
-png("MA-plot_translation_genes.png", width = 800, height = 800)
+png("reports/MA-plot_translation_genes.png", width = 800, height = 800)
 
 #Définition des 6 gènes particuliers
 genes_to_label <- c("SAOUHSC_01236", "SAOUHSC_02489", "SAOUHSC_00475", "SAOUHSC_01234", "SAOUHSC_01786", "SAOUHSC_01246")
@@ -165,13 +165,13 @@ summary(resultat_acp_translation)
 # Affichage des composantes principales
 print(resultat_acp_translation)
 
-png("PCA_translation_genes.png", width = 800, height = 600)
+#png("reports/PCA_translation_genes.png", width = 800, height = 600)
 # Visualisation des cercles des variables dans le plan factoriel de l'ACP
-fviz_pca_var(resultat_acp_translation, col.var = "black") 
-dev.off()
+#fviz_pca_var(resultat_acp_translation, col.var = "black") 
+#dev.off()
 
 #Volcano plot: Log2FoldChange en fonction de la p-value
-png("Volcano_plot_translation_genes.png", width = 800, height = 600)
+png("reports/Volcano_plot_translation_genes.png", width = 800, height = 600)
 
 plot(x=resultat_final$log2FoldChange, y=-log10(resultat_final$pvalue), main="Volcano-plot, translation genes", ylim = c(0, 21), cex=0.5)
 
