@@ -12,14 +12,12 @@ rule all:
         "scripts/PCA_all_genes.png",
         "scripts/Volcano_plot_all_genes.png",
         "scripts/MA-plot_translation_genes.png",
-        "scripts/MA-plot_translation_genes.png",
         "scripts/PCA_translation_genes.png",
         "scripts/Volcano_plot_translation_genes.png"
     output:
         "reports/MA-plot_all_genes.png",
         "reports/PCA_all_genes.png",
         "reports/Volcano_plot_all_genes.png",
-        "reports/MA-plot_translation_genes.png",
         "reports/MA-plot_translation_genes.png",
         "reports/PCA_translation_genes.png",
         "reports/Volcano_plot_translation_genes.png"
@@ -197,7 +195,6 @@ rule analysis:
         "scripts/MA-plot_all_genes.png",
         "scripts/PCA_all_genes.png",
         "scripts/Volcano_plot_all_genes.png",
-        "scripts/MA-plot_translation_genes.png",
         "scripts/MA-plot_translation_genes.png",
         "scripts/PCA_translation_genes.png",
         "scripts/Volcano_plot_translation_genes.png"
