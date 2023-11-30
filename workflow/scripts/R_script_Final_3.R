@@ -65,7 +65,7 @@ plot(x=res1$log2FoldChange, y=-log10(res1$pvalue), main="Volcano-plot, all genes
 abline(h = 0, col = "black")
 dev.off()
 
-noms_genes <- read.csv("Gene_Names_1col_true.csv", header = TRUE, sep = ";")
+noms_genes <- read.csv("scripts/genes/Gene_Names_1col_true.csv", header = TRUE, sep = ";")
 indices <- which(Full_DATA$Geneid %in% noms_genes$Name)
 resultat_final <- res1[indices, c("log2FoldChange", "baseMean", "pvalue")]
 
