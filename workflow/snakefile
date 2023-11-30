@@ -203,4 +203,4 @@ rule analysis:
     container:
         "docker://pegi3s/r_deseq2:1.32.0_v2"
     script:
-        "scripts/R_script_Final_2.R"
+        "scripts/R_script_Final_3.R"
