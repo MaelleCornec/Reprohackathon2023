@@ -68,7 +68,7 @@ summary(res)
 # Enregistrement au format png du MA-plot fait à partir de res
 png("reports/MA-plot_all_genes.png", width = 800, height = 600)
 plotMA(res,
-       main = "MA-plot, translation genes",
+       main = "MA-plot, all genes",
        colSig = "red",
        cex = 0.9)
 # Légende pour les points significatifs et non-significatifs
