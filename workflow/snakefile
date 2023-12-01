@@ -45,9 +45,7 @@ rule trimming:
     shell:
         """
         (trim_galore -q 20 --phred33 --length 25 {input} -O data_trim
-        rm {input}
-        mv data_trim/*.txt logs/trimming
-        rm data_trim) 2> {log}
+        rm {input}) 2> {log}
         """
 
 # Téléchargement du génome de référence dans un dossier reference
@@ -169,21 +167,27 @@ rule counting:
         "logs/counting.log"
     shell:
         """
-        (featureCounts -t gene -g ID -s 1 -a {input.ref} -o {output} {input.bam}
-        rm data_bam) 2> {log}
+        (featureCounts -t gene -g ID -s 1 -a {input.ref} -o {output} {input.bam}) 2> {log}
         """
+
+# Téléchargement des gènes à représenter
+rule download_genes:
+    output:
+        "scripts/genes/gene_names.csv"
+    message:
+        "Téléchargement des gènes d'intérêt"
+    script:
+        "scripts/download_gene_names.sh"
 
 # Analyse des échantillons en connaissant le nom des gènes
 rule analysis:
     input:
         "scripts/genes/counts.txt",
-        "scripts/genes/Gene_Names_1col_true.csv"
+        "scripts/genes/gene_names.csv"
     output:
         "reports/MA-plot_all_genes.png",
-        #"reports/PCA_all_genes.png",
         "reports/Volcano_plot_all_genes.png",
         "reports/MA-plot_translation_genes.png",
-        #"reports/PCA_translation_genes.png",
         "reports/Volcano_plot_translation_genes.png"
     message:
         "Réalisation des figures"
@@ -196,7 +200,7 @@ rule analysis:
 rule analysis_acp:
     input:
         "scripts/genes/counts.txt",
-        "scripts/genes/Gene_Names_1col_true.csv"
+        "scripts/genes/gene_names.csv"
     output:
         "reports/PCA_all_genes.png",
         "reports/PCA_translation_genes.png",
