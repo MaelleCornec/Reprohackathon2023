@@ -64,31 +64,34 @@ res <- results(dds_full, alpha = 0.05)
 head(res)
 summary(res)
 # Enregistrement au format png du MA-plot fait à partir de res
-png("reports/MA-plot_all_genes.png", width = 800, height = 600)
+png("reports/MA-plot_all_genes.png", width = 800, height = 800)
 plotMA(res,
        main = "MA-plot, all genes",
+       ylim = c(-6, 6),
        colSig = "red",
-       cex = 0.9)
+       cex = 1.5)
 # Légende pour les points significatifs et non-significatifs
 legend("bottomleft",
-       legend = c("Significatif", "Non-significatif"),
+       legend = c("Significant", "Non-significant"),
        pch = 16,
-       col = c("red", "black"))
+       col = c("red", "grey"),
+       cex = 1.5)
 dev.off()
 
 # Construction du Volcano plot ###################
 
 # Création de l'image du Volcano plot
-png("reports/Volcano_plot_all_genes.png", width = 800, height = 600)
+png("reports/Volcano_plot_all_genes.png", width = 800, height = 800)
 # Volcano plot: Log2FoldChange en fonction de - ln de la p-value ajustée
 plot(x = res$log2FoldChange,
      y = -log10(res$padj),
      main = "Volcano-plot, all genes",
-     xlim = c(-8, 8),
+     xlim = c(-6, 6),
      ylim = c(0, 20),
-     cex = 0.5,
-     xlab = bquote(~log[2] ~ fold ~ change),
-     ylab = bquote(~-log[10] ~ Q ~ value))
+     pch = 16,
+     cex = 1.5,
+     xlab = bquote(~Log[2] ~ Fold ~ Change),
+     ylab = bquote(~-Log[10] ~ Q ~ Value))
 abline(h = 0, col = "black")
 dev.off()
 
@@ -110,54 +113,66 @@ for (i in seq_along(genes_to_label)) {
   index <- append(index,
                   which(translation_genes$Geneid == gene))
 }
-print("index :")
-index
 # Création de l'index pour les points à encadrer en bleu
 # Liés à l'aminoacyl ARNt synthétase
-# Trouver l'indice où Geneid == "SAOUHSC_T0001"
-#start_index <- which(genes_names$Name == "SAOUHSC_T0001")
+start_index <- which(genes_names$Name == "SAOUHSC_00509")
+end_index <- which(genes_names$Name == "SAOUHSC_00933")
 # Liste des gènes liés à la synthèse de l'aminoacyl ARNt
-#noms_genes_arnt <- genes_names$Name[start_index:162]
-# Liste des index dans GENES_TRANSLATION_DATA
-#index_to_encircle <- c()
-#for (i in seq_along(noms_genes_arnt)) {
-#  index_to_encircle <- append(index_to_encircle,
-#                       which(translation_genes$Geneid == noms_genes_arnt[i]))
-#}
+noms_genes_arnt <- genes_names$Name[start_index:end_index]
+# Liste des index dans translation_genes
+index_to_encircle <- c()
+for (i in seq_along(noms_genes_arnt)) {
+  index_to_encircle <- append(index_to_encircle,
+                       which(translation_genes$Geneid == noms_genes_arnt[i]))
+}
 
 # Construction du MA-plot ###############################
 
 #Plot classique
-png("reports/MA-plot_translation_genes.png", width = 800, height = 600)
+png("reports/MA-plot_translation_genes.png", width = 800, height = 800)
 plotMA(resultat_final,
        main = "MA-plot, translation genes",
+       ylim = c(-6, 6),
        colSig = "red",
-       cex = 0.9)
+       cex = 1.5)
 # Annotation des 6 gènes particuliers (à droite de leur point)
 text(x = resultat_final$baseMean[index],
      y = resultat_final$log2FoldChange[index],
      pos = 4,
      labels = genes_code,
-     cex = 1)
+     cex = 1.5)
+# Encadrement des points liés à l'aminoacyl ARNt synthétase
+points(x = resultat_final$baseMean[index_to_encircle],
+       y = resultat_final$log2FoldChange[index_to_encircle],
+       pch = 1,
+       col = "black",
+       cex = 1.75)
 # Légende pour les points significatifs et non-significatifs
 legend("bottomleft",
-       legend = c("Significatif", "Non-significatif"),
+       legend = c("Significant", "Non-significant"),
        pch = 16,
-       col = c("red", "black"))
+       col = c("red", "grey"),
+       cex = 1.5)
+legend("bottomright",
+       legend = c("AA-tRNA synthetases"),
+       pch = 1,
+       col = c("black"),
+       cex = 1.75)
 dev.off()
 
 # Construction du Volcano plot ###################
 
 # Création de l'image du Volcano plot
-png("reports/Volcano_plot_translation_genes.png", width = 800, height = 600)
+png("reports/Volcano_plot_translation_genes.png", width = 800, height = 800)
 # Volcano plot: Log2FoldChange en fonction de - ln de la p-value ajustée
 plot(x = resultat_final$log2FoldChange,
      y = -log10(resultat_final$padj),
      main = "Volcano-plot, translation genes",
-     xlim = c(-8, 8),
+     xlim = c(-6, 6),
      ylim = c(0, 20),
-     cex = 0.5,
-     xlab = bquote(~log[2] ~ fold ~ change),
-     ylab = bquote(~-log[10] ~ Q ~ value))
+     pch = 16,
+     cex = 1.5,
+     xlab = bquote(~Log[2] ~ Fold ~ Change),
+     ylab = bquote(~-Log[10] ~ Q ~ Value))
 abline(h = 0, col = "black")
 dev.off()
