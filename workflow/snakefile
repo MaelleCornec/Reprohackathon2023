@@ -173,17 +173,17 @@ rule counting:
 # Téléchargement des gènes à représenter
 rule download_genes:
     output:
-        "scripts/genes/gene_names.csv"
+        "scripts/genes/translation_genes.csv"
     message:
         "Téléchargement des gènes d'intérêt"
     script:
-        "scripts/download_gene_names.sh"
+        "scripts/download_translation_genes.sh"
 
 # Analyse des échantillons en connaissant le nom des gènes
 rule analysis:
     input:
         "scripts/genes/counts.txt",
-        "scripts/genes/gene_names.csv"
+        "scripts/genes/translation_genes.csv"
     output:
         "reports/MA-plot_all_genes.png",
         "reports/Volcano_plot_all_genes.png",
@@ -200,7 +200,7 @@ rule analysis:
 rule analysis_acp:
     input:
         "scripts/genes/counts.txt",
-        "scripts/genes/gene_names.csv"
+        "scripts/genes/translation_genes.csv"
     output:
         "reports/PCA_all_genes.png",
         "reports/PCA_translation_genes.png",

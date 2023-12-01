@@ -21,7 +21,7 @@ awk '
 sed 's/.*SAOUHSC/SAOUHSC/' sao00003.keg > sao00004.keg
 
 # Suppression de tout ce qui se trouve après le premier espace pour n'avoir que le nom du gène
-awk '{sub(/ .*/, ""); print}' sao00004.keg > genes/translation_genes.csv
+awk '{sub(/ .*/, ""); print}' sao00004.keg > scripts/genes/translation_genes.csv
 
 # Suppression des fichiers intermédiaires
 rm sao00001.keg sao00002.keg sao00003.keg sao00004.keg
