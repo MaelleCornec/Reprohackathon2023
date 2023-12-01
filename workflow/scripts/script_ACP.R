@@ -4,9 +4,7 @@
 
 library(ggplot2)
 library(dplyr)
-library(BiocManager)
-library(DESeq2)
-#library(factoextra)
+library(factoextra)
 
 ###################################################################
 # Chargement des données nécessaires et premières transformations #
