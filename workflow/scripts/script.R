@@ -6,7 +6,7 @@ library(ggplot2)
 library(dplyr)
 library(BiocManager)
 library(DESeq2)
-library(factoextra)
+#library(factoextra)
 
 ###################################################################
 # Chargement des données nécessaires et premières transformations #
@@ -15,7 +15,7 @@ library(factoextra)
 # Données de comptage #############################################
 
 # Chargement fichier counts.txt dans la variable full_data
-full_data <- read.table("genes/counts.txt", header = TRUE, skip = 1)
+full_data <- read.table("scripts/genes/counts.txt", header = TRUE, skip = 1)
 # Suppression des 5 premiers caractères de la colonne Geneid
 full_data$Geneid <- substring(full_data$Geneid, first = 6)
 # Renommage des colonnes 7 à 12
@@ -29,7 +29,7 @@ colnames(full_data)[7:12] <- c("Treatment_1",
 # Gènes obtenus par la documentation ##############################
 
 # Chargement fichier Gene_Names dans la variable genes_names
-genes_names <- read.csv("genes/Gene_Names_1col_true.csv",
+genes_names <- read.csv("scripts/genes/Gene_Names_1col_true.csv",
                         header = TRUE,
                         sep = ";")
 # Sélection des gènes dans full_data correspondant aux gènes de genes_names
@@ -87,14 +87,14 @@ res_acp <- prcomp(count_data, scale. = TRUE)
 summary(res_acp)
 print(res_acp)
 # Explication fournie par la variance de chaque composante principale
-table_acp <- factoextra::get_eig(res_acp)
+#table_acp <- factoextra::get_eig(res_acp)
 # Visualisation des cercles des variables dans le plan factoriel de l'ACP
-png("reports/PCA_all_genes.png", width = 800, height = 600)
-fviz_pca_var(res_acp,
-             col.var = "cos2",
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE)
-dev.off()
+#png("reports/PCA_all_genes.png", width = 800, height = 600)
+#fviz_pca_var(res_acp,
+#             col.var = "cos2",
+#             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+#             repel = TRUE)
+#dev.off()
 
 # Construction du Volcano plot ###################
 
@@ -172,14 +172,14 @@ res_acp_trans <- prcomp(translation_genes[,c(7,8,9,10,11,12)], scale. = TRUE)
 summary(res_acp_trans)
 print(res_acp_trans)
 # Explication fournie par la variance de chaque composante principale
-table_acp_trans <- factoextra::get_eig(res_acp_trans)
+#table_acp_trans <- factoextra::get_eig(res_acp_trans)
 # Visualisation des cercles des variables dans le plan factoriel de l'ACP
-png("reports/PCA_translation_genes.png", width = 800, height = 600)
-fviz_pca_var(res_acp_trans,
-             col.var = "cos2",
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE)
-dev.off()
+#png("reports/PCA_translation_genes.png", width = 800, height = 600)
+#fviz_pca_var(res_acp_trans,
+#             col.var = "cos2",
+#             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+#             repel = TRUE)
+#dev.off()
 
 # Construction du Volcano plot ###################
 

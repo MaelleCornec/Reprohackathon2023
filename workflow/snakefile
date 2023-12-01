@@ -9,10 +9,10 @@ configfile:
 rule all:
     input:
         "reports/MA-plot_all_genes.png",
-        "reports/PCA_all_genes.png",
+        #"reports/PCA_all_genes.png",
         "reports/Volcano_plot_all_genes.png",
         "reports/MA-plot_translation_genes.png",
-        "reports/PCA_translation_genes.png",
+        #"reports/PCA_translation_genes.png",
         "reports/Volcano_plot_translation_genes.png"
 
 # Téléchargement des 6 échantillons à analyser
@@ -180,14 +180,14 @@ rule analysis:
         "scripts/genes/Gene_Names_1col_true.csv"
     output:
         "reports/MA-plot_all_genes.png",
-        "reports/PCA_all_genes.png",
+        #"reports/PCA_all_genes.png",
         "reports/Volcano_plot_all_genes.png",
         "reports/MA-plot_translation_genes.png",
-        "reports/PCA_translation_genes.png",
+        #"reports/PCA_translation_genes.png",
         "reports/Volcano_plot_translation_genes.png"
     message:
         "Réalisation des figures"
     container:
         "docker://pegi3s/r_deseq2:1.32.0_v2"
     script:
-        "scripts/script.r"
+        "scripts/script.R"
