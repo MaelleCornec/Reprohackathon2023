@@ -27,9 +27,8 @@ colnames(full_data)[7:12] <- c("Treatment_1",
 # Gènes obtenus par la documentation ##############################
 
 # Chargement fichier Gene_Names dans la variable genes_names
-genes_names <- read.csv("scripts/genes/Gene_Names_1col_true.csv",
-                        header = TRUE,
-                        sep = ";")
+genes_names <- read.csv("scripts/genes/translation_genes.csv",
+                        header = TRUE)
 # Sélection des gènes dans full_data correspondant aux gènes de genes_names
 indices <- which(full_data$Geneid %in% genes_names$Name)
 translation_genes <- full_data[indices, c(1:12)]
@@ -55,7 +54,7 @@ print(res_acp)
 # Explication fournie par la variance de chaque composante principale
 table_acp <- factoextra::get_eig(res_acp)
 # Visualisation des cercles des variables dans le plan factoriel de l'ACP
-png("reports/PCA_all_genes.png", width = 800, height = 600)
+png("reports/PCA_all_genes.png", width = 800, height = 800)
 fviz_pca_var(res_acp,
              col.var = "cos2",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
@@ -77,7 +76,7 @@ print(res_acp_trans)
 # Explication fournie par la variance de chaque composante principale
 table_acp_trans <- factoextra::get_eig(res_acp_trans)
 # Visualisation des cercles des variables dans le plan factoriel de l'ACP
-png("reports/PCA_translation_genes.png", width = 800, height = 600)
+png("reports/PCA_translation_genes.png", width = 800, height = 800)
 fviz_pca_var(res_acp_trans,
              col.var = "cos2",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
