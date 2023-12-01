@@ -29,7 +29,7 @@ colnames(full_data)[7:12] <- c("Treatment_1",
 # Gènes obtenus par la documentation ##############################
 
 # Chargement fichier Gene_Names dans la variable genes_names
-genes_names <- read.csv("scripts/genes/Gene_Names_1col_true.csv",
+genes_names <- read.csv("scripts/genes/translation_genes.csv",
                         header = TRUE,
                         sep = ";")
 # Sélection des gènes dans full_data correspondant aux gènes de genes_names
@@ -78,24 +78,6 @@ legend("bottomleft",
        col = c("red", "black"))
 dev.off()
 
-# Construction des figures d'ACP #################
-
-# Calcul de l'ACP avec prcomp()
-# Utilisation de scale. = TRUE pour centrer et réduire les variables
-res_acp <- prcomp(count_data, scale. = TRUE)
-# Résumé des résultats de l'ACP et affichage des composantes principales
-summary(res_acp)
-print(res_acp)
-# Explication fournie par la variance de chaque composante principale
-#table_acp <- factoextra::get_eig(res_acp)
-# Visualisation des cercles des variables dans le plan factoriel de l'ACP
-#png("reports/PCA_all_genes.png", width = 800, height = 600)
-#fviz_pca_var(res_acp,
-#             col.var = "cos2",
-#             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-#             repel = TRUE)
-#dev.off()
-
 # Construction du Volcano plot ###################
 
 # Création de l'image du Volcano plot
@@ -133,15 +115,15 @@ for (i in seq_along(genes_to_label)) {
 # Création de l'index pour les points à encadrer en bleu
 # Liés à l'aminoacyl ARNt synthétase
 # Trouver l'indice où Geneid == "SAOUHSC_T0001"
-start_index <- which(genes_names$Name == "SAOUHSC_T0001")
+#start_index <- which(genes_names$Name == "SAOUHSC_T0001")
 # Liste des gènes liés à la synthèse de l'aminoacyl ARNt
-noms_genes_arnt <- genes_names$Name[start_index:162]
+#noms_genes_arnt <- genes_names$Name[start_index:162]
 # Liste des index dans GENES_TRANSLATION_DATA
-index_to_encircle <- c()
-for (i in seq_along(noms_genes_arnt)) {
-  index_to_encircle <- append(index_to_encircle,
-                       which(translation_genes$Geneid == noms_genes_arnt[i]))
-}
+#index_to_encircle <- c()
+#for (i in seq_along(noms_genes_arnt)) {
+#  index_to_encircle <- append(index_to_encircle,
+#                       which(translation_genes$Geneid == noms_genes_arnt[i]))
+#}
 
 # Construction du MA-plot ###############################
 
@@ -162,24 +144,6 @@ legend("bottomleft",
        pch = 16,
        col = c("red", "black"))
 dev.off()
-
-# Construction des figures d'ACP #################
-
-# Calcul de l'ACP avec prcomp()
-# Utilisation de scale. = TRUE pour centrer et réduire les variables
-res_acp_trans <- prcomp(translation_genes[,c(7,8,9,10,11,12)], scale. = TRUE)
-# Résumé des résultats de l'ACP et affichage des composantes principales
-summary(res_acp_trans)
-print(res_acp_trans)
-# Explication fournie par la variance de chaque composante principale
-#table_acp_trans <- factoextra::get_eig(res_acp_trans)
-# Visualisation des cercles des variables dans le plan factoriel de l'ACP
-#png("reports/PCA_translation_genes.png", width = 800, height = 600)
-#fviz_pca_var(res_acp_trans,
-#             col.var = "cos2",
-#             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-#             repel = TRUE)
-#dev.off()
 
 # Construction du Volcano plot ###################
 
