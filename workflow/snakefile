@@ -9,10 +9,10 @@ configfile:
 rule all:
     input:
         "reports/MA-plot_all_genes.png",
-        #"reports/PCA_all_genes.png",
+        "reports/PCA_all_genes.png",
         "reports/Volcano_plot_all_genes.png",
         "reports/MA-plot_translation_genes.png",
-        #"reports/PCA_translation_genes.png",
+        "reports/PCA_translation_genes.png",
         "reports/Volcano_plot_translation_genes.png"
 
 # Téléchargement des 6 échantillons à analyser
@@ -191,3 +191,18 @@ rule analysis:
         "docker://pegi3s/r_deseq2:1.32.0_v2"
     script:
         "scripts/script.R"
+
+# Réalisation des ACP
+rule analysis_acp:
+    input:
+        "scripts/genes/counts.txt",
+        "scripts/genes/Gene_Names_1col_true.csv"
+    output:
+        "reports/PCA_all_genes.png",
+        "reports/PCA_translation_genes.png",
+    message:
+        "Réalisation des ACP"
+    container:
+        "docker://kamirab/r_deseq_pca:latest"
+    script:
+        "scripts/script_ACP.R"
