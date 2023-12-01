@@ -24,6 +24,16 @@ colnames(full_data)[7:12] <- c("Treatment_1",
                                "Control_2",
                                "Control_3")
 
+# Gènes obtenus par la documentation ##############################
+
+# Chargement fichier Gene_Names dans la variable genes_names
+genes_names <- read.csv("scripts/genes/Gene_Names_1col_true.csv",
+                        header = TRUE,
+                        sep = ";")
+# Sélection des gènes dans full_data correspondant aux gènes de genes_names
+indices <- which(full_data$Geneid %in% genes_names$Name)
+translation_genes <- full_data[indices, c(1:12)]
+
 # Création des dataframes utiles à l'analyse ######################
 
 # Création du dataframe de comptage des échantillons dans la variable count_data
