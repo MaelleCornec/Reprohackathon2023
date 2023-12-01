@@ -6,7 +6,6 @@ library(ggplot2)
 library(dplyr)
 library(BiocManager)
 library(DESeq2)
-#library(factoextra)
 
 ###################################################################
 # Chargement des données nécessaires et premières transformations #
@@ -28,10 +27,9 @@ colnames(full_data)[7:12] <- c("Treatment_1",
 
 # Gènes obtenus par la documentation ##############################
 
-# Chargement fichier Gene_Names dans la variable genes_names
+# Chargement fichier translation_genes dans la variable genes_names
 genes_names <- read.csv("scripts/genes/translation_genes.csv",
-                        header = TRUE,
-                        sep = ";")
+                        header = TRUE)
 # Sélection des gènes dans full_data correspondant aux gènes de genes_names
 indices <- which(full_data$Geneid %in% genes_names$Name)
 translation_genes <- full_data[indices, c(1:12)]
@@ -86,6 +84,7 @@ png("reports/Volcano_plot_all_genes.png", width = 800, height = 600)
 plot(x = res$log2FoldChange,
      y = -log10(res$padj),
      main = "Volcano-plot, all genes",
+     xlim = c(-8, 8),
      ylim = c(0, 20),
      cex = 0.5,
      xlab = bquote(~log[2] ~ fold ~ change),
@@ -111,7 +110,8 @@ for (i in seq_along(genes_to_label)) {
   index <- append(index,
                   which(translation_genes$Geneid == gene))
 }
-
+print("index :")
+index
 # Création de l'index pour les points à encadrer en bleu
 # Liés à l'aminoacyl ARNt synthétase
 # Trouver l'indice où Geneid == "SAOUHSC_T0001"
@@ -133,11 +133,12 @@ plotMA(resultat_final,
        main = "MA-plot, translation genes",
        colSig = "red",
        cex = 0.9)
-#text(x = resultat_final$baseMean[index],
-#     y = resultat_final$log2FoldChange[index],
-#     pos = 4,
-#     labels = genes_code,
-#     cex = 1)
+# Annotation des 6 gènes particuliers (à droite de leur point)
+text(x = resultat_final$baseMean[index],
+     y = resultat_final$log2FoldChange[index],
+     pos = 4,
+     labels = genes_code,
+     cex = 1)
 # Légende pour les points significatifs et non-significatifs
 legend("bottomleft",
        legend = c("Significatif", "Non-significatif"),
@@ -153,6 +154,7 @@ png("reports/Volcano_plot_translation_genes.png", width = 800, height = 600)
 plot(x = resultat_final$log2FoldChange,
      y = -log10(resultat_final$padj),
      main = "Volcano-plot, translation genes",
+     xlim = c(-8, 8),
      ylim = c(0, 20),
      cex = 0.5,
      xlab = bquote(~log[2] ~ fold ~ change),
