@@ -99,6 +99,15 @@ Plus particulièrement, il s'intéresse au **cas du Staphylocoque doré**.
     - Création des scripts d'analyse des séquences.
     - Intégration de ces éléments dans le workflow.
 
+Fonctionnement du répertoire pour executer le workflow :
+- Travail dans l'environnement BioPipes proposé sur l'IFB Cloud -> choisir une VM asez grande (taille standard)
+- Dans l'environnement VS Code (après s'être connecté à la VM et avoir cloné le répertoire Reprohackathon2023) ouvrir le terminal et faire :
+- ´conda init' (fermer et réouvrir le terminal)
+- ´conda activate snakemake´. Vérifier la version de snakemake avec 'snakemake --version'. Elle doit être superieur à 7.
+- Se déplacer dans le répertoire workflow avec ´cd workflow'.
+- Executer le programme d'installation de singularity avec './install_singularity.sh'. Vérifier que singularity est bien installé avec ´singularity --version'. Cela doit être apptainer version 1.2.4.
+- Exécuter le workflow avec la commande 'snakemake --use-singularity --cores'.
+
 ## Réalisations
 
 ## Résultats obtenus
