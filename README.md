@@ -26,7 +26,7 @@ Formation IODAA AgroParisTech / Université Paris-Saclay.
 
 Ce cours a pour objectif de reproduire les résultats obtenus dans l'article *Intracellular Staphylococcus aureus persisters upon antibiotic exposure. Frédéric Peyrusson et al. Nat Commun. 2020 May 4;11(1):2200*.  
 En particulier, l'objectif était de reproduire certaines figures de l'article portant sur la partie séquençage d'ARN d'échantillons contrôle et persistants de S.aureus. Les figures représentent l'analyse différentielle de l'expression génique :
-![Figures de l'article à reproduire alternatif](Figures_pour_le_README/Reprohackathon2023/figures_a_reproduire.JPG)
+![Figures de l'article à reproduire alternatif](Figures_pour_le_README/figures_a_reproduire.JPG)
    
 Les premières séances ont servi à : 
 - Introduire la problématique de la reproductibilté en bio-informatique.
@@ -113,7 +113,7 @@ Plus particulièrement, l'article s'intéresse au **cas du Staphylocoque doré**
 
 Les trois parties suivantes sont traitées plus en détail dans le rapport disponible dans ce même dépôt. 
 Les étapes effectuées et intégrées au pipeline pour reproduire l'expérience du papier peuvent se résumer avec l'image suivante :
-![DAG des étapes du pipeline](Figures_pour_le_README/Reprohackathon2023/dag.JPG)
+![DAG des étapes du pipeline](Figures_pour_le_README/dag.JPG)
 Ces étapes comprennent : 
 - le téléchargement des données à l'aide de SRAToolkit et des numéros SRR des six échantillons
 - le téléchargement du génome de référence et de ses annotations
