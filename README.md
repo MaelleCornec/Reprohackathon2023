@@ -25,7 +25,7 @@ Formation IODAA AgroParisTech / Université Paris-Saclay.
 ## Description du contexte
 
 Ce cours a pour objectif de reproduire les résultats obtenus dans l'article *Intracellular Staphylococcus aureus persisters upon antibiotic exposure. Frédéric Peyrusson et al. Nat Commun. 2020 May 4;11(1):2200*.  
-En particulier, l'objectif était de reproduire certaines figures de l'article portant sur la partie séquençage d'ARN d'échantillons contrôle et persistants de S.aureus. Les figures représentent l'analyse différentielle de l'expression génique :
+En particulier, l'objectif était de reproduire certaines figures de l'article portant sur la partie séquençage d'ARN d'échantillons contrôles et persistants de S.aureus. Les figures représentent l'analyse différentielle de l'expression génique :
 ![Figures de l'article à reproduire alternatif](Figures_pour_le_README/figures_a_reproduire.JPG)
    
 Les premières séances ont servi à : 
@@ -36,7 +36,7 @@ Les premières séances ont servi à :
     - la création d'environnemnt fermés par le biais de containers : Docker ;
     - la création d'un workflow : Snakemake.
   
-Les séances suivantes étaient consacrées à la réalisation du projet lui-même.  
+Les séances suivantes étaient consacrées à la réalisation du projet en lui-même.  
 
 ### Contexte de l'article
 
@@ -121,13 +121,13 @@ Ces étapes comprennent :
 - l'indexation du génome avec l'outil Bowtie 0.12.7
 - le mapping des six échantillons à l'aide de bowtie et samtools 
 - le comptage des gènes à l'aide de l'outil featureCounts 1.4.6-p3
-- et enfin l'analyse statistique avec R et DESeq2
+- et enfin l'analyse statistique avec R et DESeq2 1.32.0
 
 ## Résultats obtenus
 L'analyse statistique permet de visualiser les résultats suivants : 
 ![MA-plot, tous les gènes](Figures_pour_le_README/MA-plot_all_genes_2.png)
 ![MA-plot, gènes de la traduction](Figures_pour_le_README/MA-plot_translation_2.png)
-Sur ce second graphique, les gènes de la traduction ont été étiquetés. 
+Sur ce second graphique, les gènes de la traduction ont été étiquetés, conformément à la figure à reproduire de l'article. 
 
 Pour comprendre et vérifier la cohérence de nos résultats, nous avons également réalisé un volcano-plot et une ACP pour tous les gènes et les gènes impliqués dans la traduction. Ces graphiques sont disponibles dans le rapport.
 
