@@ -126,7 +126,8 @@ Ces étapes comprennent :
 ## Résultats obtenus
 L'analyse statistique permet de visualiser les résultats suivants : 
 ![MA-plot, tous les gènes](figures_README/MA-plot_all_genes_2.png)
-![MA-plot, gènes de la traduction](figures_README/MA-plot_translation_2.png)
+![MA-plot, gènes de la traduction](figures_README/MA-plot_translation_2.png)   
+
 Sur ce second graphique, les gènes de la traduction ont été étiquetés, conformément à la figure à reproduire de l'article. 
 
 Pour comprendre et vérifier la cohérence de nos résultats, nous avons également réalisé un volcano-plot et une ACP pour tous les gènes et les gènes impliqués dans la traduction. Ces graphiques sont disponibles dans le rapport.
