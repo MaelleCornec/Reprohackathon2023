@@ -8,7 +8,12 @@ configfile:
 # Il exécutera récursivement toutes les règles nécessaires pour obtenir le fichier count
 rule all:
     input:
-        "reports/result.png"
+        "reports/MA-plot_all_genes.png",
+        "reports/PCA_all_genes.png",
+        "reports/Volcano_plot_all_genes.png",
+        "reports/MA-plot_translation_genes.png",
+        "reports/PCA_translation_genes.png",
+        "reports/Volcano_plot_translation_genes.png"
 
 # Téléchargement des 6 échantillons à analyser
 rule downloading:
@@ -165,15 +170,43 @@ rule counting:
         (featureCounts -t gene -g ID -s 1 -a {input.ref} -o {output} {input.bam}) 2> {log}
         """
 
+# Téléchargement des gènes à représenter
+rule download_genes:
+    output:
+        "scripts/genes/translation_genes.csv"
+    message:
+        "Téléchargement des gènes d'intérêt"
+    script:
+        "scripts/download_translation_genes.sh"
+
 # Analyse des échantillons en connaissant le nom des gènes
 rule analysis:
     input:
-        "scripts/genes/counts.txt"
+        "scripts/genes/counts.txt",
+        "scripts/genes/translation_genes.csv"
     output:
-        "reports/result.png"
+        "reports/MA-plot_all_genes.png",
+        "reports/Volcano_plot_all_genes.png",
+        "reports/MA-plot_translation_genes.png",
+        "reports/Volcano_plot_translation_genes.png"
     message:
         "Réalisation des figures"
     container:
         "docker://pegi3s/r_deseq2:1.32.0_v2"
     script:
-        "scripts/R_script_Final_2.R"
+        "scripts/script.R"
+
+# Réalisation des ACP
+rule analysis_acp:
+    input:
+        "scripts/genes/counts.txt",
+        "scripts/genes/translation_genes.csv"
+    output:
+        "reports/PCA_all_genes.png",
+        "reports/PCA_translation_genes.png",
+    message:
+        "Réalisation des ACP"
+    container:
+        "docker://kamirab/r_deseq_pca:latest"
+    script:
+        "scripts/script_ACP.R"
